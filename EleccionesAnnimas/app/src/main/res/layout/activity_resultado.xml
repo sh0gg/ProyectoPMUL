@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:padding="@dimen/padding_screen"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_screen">
+
     <TextView
         android:id="@+id/tvTitle"
         style="@style/TextAppearance.Material3.HeadlineSmall"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/tvSummary"
         style="@style/TextAppearance.Material3.BodyMedium"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/space_m"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/space_m" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvResults"
-        android:layout_width="match_parent" android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <Button
         android:id="@+id/btnBackHome"
-        android:text="@string/btn_back_home"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/btn_back_home" />
 </LinearLayout>

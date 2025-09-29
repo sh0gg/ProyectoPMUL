@@ -1,34 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:orientation="vertical" android:padding="@dimen/space_s">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/space_s">
+
     <TextView
         android:id="@+id/tvPollTitle"
         style="@style/TextAppearance.Material3.TitleMedium"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/tvPollMeta"
         style="@style/TextAppearance.Material3.BodySmall"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:alpha="0.7" />
+
     <LinearLayout
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="horizontal" android:gravity="end">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+
         <ImageButton
             android:id="@+id/btnStartPoll"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:contentDescription="@string/cd_start"
-            android:src="@android:drawable/ic_media_play"
-            android:layout_width="48dp" android:layout_height="48dp" />
+            android:src="@android:drawable/ic_media_play" />
+
         <ImageButton
             android:id="@+id/btnEditPoll"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:contentDescription="@string/cd_edit"
-            android:src="@android:drawable/ic_menu_edit"
-            android:layout_width="48dp" android:layout_height="48dp" />
+            android:src="@android:drawable/ic_menu_edit" />
+
         <ImageButton
             android:id="@+id/btnDeletePoll"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:contentDescription="@string/cd_delete"
-            android:src="@android:drawable/ic_menu_delete"
-            android:layout_width="48dp" android:layout_height="48dp" />
+            android:src="@android:drawable/ic_menu_delete" />
     </LinearLayout>
 </LinearLayout>

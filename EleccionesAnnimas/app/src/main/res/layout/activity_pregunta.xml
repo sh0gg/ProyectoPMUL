@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="@dimen/padding_screen">
+
     <TextView
         android:id="@+id/tvTitle"
         style="@style/TextAppearance.Material3.HeadlineSmall"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/tvCounter"
         style="@style/TextAppearance.Material3.BodyMedium"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/space_s"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/space_s" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvOptions"
-        android:layout_width="match_parent" android:layout_height="0dp"
-        android:layout_weight="1" android:overScrollMode="never" />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never" />
+
     <Button
         android:id="@+id/btnAbstain"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/btn_abstain" />
+
     <Button
         android:id="@+id/btnShowResults"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="@string/btn_show_results"
-        android:layout_marginTop="@dimen/space_s"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_s"
+        android:text="@string/btn_show_results" />
 </LinearLayout>
