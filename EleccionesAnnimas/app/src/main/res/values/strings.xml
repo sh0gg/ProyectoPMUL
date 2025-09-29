@@ -1,0 +1,34 @@
+<resources>
+    <!-- App / títulos -->
+    <string name="app_name">Elecciones Anónimas</string>
+    <string name="lbl_create_poll">Crear encuesta</string>
+    <string name="hint_title">Título de la encuesta</string>
+    <string name="hint_voters">Número de participantes</string>
+    <string name="lbl_options">Opciones</string>
+    <string name="hint_option">Texto de la opción</string>
+    <!-- Botones -->
+    <string name="btn_add_option">Añadir opción</string>
+    <string name="btn_create_poll">Guardar encuesta</string>
+    <string name="btn_start_latest">Empezar la última</string>
+    <string name="btn_abstain">Abstenerse</string>
+    <string name="btn_show_results">Ver resultados</string>
+    <string name="btn_back_home">Volver al inicio</string>
+    <!-- Listado encuestas -->
+    <string name="lbl_saved_polls">Encuestas guardadas</string>
+    <string name="fmt_meta">%1$d participantes</string>
+    <string name="cd_start">Iniciar</string>
+    <string name="cd_edit">Editar</string>
+    <string name="cd_delete">Borrar</string>
+    <!-- Votación / resultados -->
+    <string name="fmt_counter">%1$d / %2$d votos</string>
+    <string name="fmt_results_summary">Votos: %1$d de %2$d • Abstenciones:
+%3$d</string>
+    <string name="fmt_votes_pct">%1$d votos — %2$d%%</string>
+    <!-- Validaciones / mensajes -->
+    <string name="err_required">Obligatorio</string>
+    <string name="err_voters">Debe ser &gt;= 1</string>
+    <string name="err_min_options">Mínimo 2 opciones</string>
+    <string name="err_no_polls">No hay encuestas</string>
+    <string name="msg_created">Encuesta guardada</string>
+    <string name="msg_loaded_for_edit">Cargada para editar</string>
+</resources>

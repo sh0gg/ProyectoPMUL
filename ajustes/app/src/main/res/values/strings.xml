@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TuApp</string>
+    <string name="nombre">Nombre</string>
+    <string name="correo">Correo electrónico</string>
+    <string name="edad">Edad</string>
+    <string name="recibirPublicidad">Recibir publicidad</string>
+    <string name="guardar">Guardar</string>
+    <string name="errorGuardarAjustes">Error al guardar los ajustes. Verifica los datos introducidos.</string>
+    <string name="settings">Ajustes</string>
+    <string name="hello_world">Hello World!</string>
+</resources>
