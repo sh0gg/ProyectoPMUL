@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado cuando el item está activado/seleccionado en el modo contextual -->
+    <item android:state_activated="true"
+          android:drawable="@android:color/darker_gray" />
+
+    <!-- Estado por defecto (no seleccionado) -->
+    <item android:drawable="@android:color/transparent" />
+</selector>
