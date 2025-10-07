@@ -65,8 +65,13 @@ public class MainActivity extends AppCompatActivity {
         lvClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // cambia el texto del titulo
+
                 String text = getString(R.string.hola) + " " + NOMBRE_CLIENTES[position];
                 tvTitulo.setText(text);
+
+                // y pasa el texto a la segunda actividad
 
                 Intent intent = new Intent(MainActivity.this, SegundaActivity.class);
                 intent.putExtra("texto", text);
