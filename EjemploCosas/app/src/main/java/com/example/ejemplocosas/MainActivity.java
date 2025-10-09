@@ -16,9 +16,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
-    private String[] NOMBRE_CLIENTES = {"Cliente 1", "Cliente 2", "Cliente 3", "Cliente 4"};
+public class MainActivity extends AppCompatActivity {
+    
 
     private ListView lvClientes;
     private TextView tvTitulo;
@@ -43,7 +48,13 @@ public class MainActivity extends AppCompatActivity {
         lvClientes = findViewById(R.id.lvClientes);
         tvTitulo = findViewById(R.id.tvTitulo);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, NOMBRE_CLIENTES);
+        // "Mi String, me lo robaron, estando de romería"
+        // "Mi String, me lo robaron,"
+        // "anoche cuando dormía."
+        // "¿Dónde estará mi String?"
+        // "¿Dónde estará mi String?"
+
+        ArrayAdapter<Cliente> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaClientes);
 
         lvClientes.setAdapter(adapter);
 
@@ -80,10 +91,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
     }
-}
