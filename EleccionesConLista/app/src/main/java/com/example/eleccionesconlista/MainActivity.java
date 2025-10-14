@@ -9,20 +9,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-    private static boolean votar(int n,Candidato candidato) {
-        if (n>0) {
-            candidato.setVotos(candidato.getVotos()+1);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private static boolean login(String user,String pass) {
-        
-    }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
