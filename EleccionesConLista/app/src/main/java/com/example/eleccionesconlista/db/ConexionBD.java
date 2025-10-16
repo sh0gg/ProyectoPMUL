@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.eleccionesconlista.AsistenteBD;
 import com.example.eleccionesconlista.modelo.Candidato;
-import com.example.eleccionesconlista.modelo.Partido;
 import com.example.eleccionesconlista.modelo.Usuario;
 
 import java.util.ArrayList;
@@ -57,15 +56,12 @@ public class ConexionBD {
         return user;
     }
 
-    public boolean login(String usuario, String password) {
-        Cursor cursor = db.rawQuery("SELECT * FROM usuarios WHERE usuario = ? AND password = ?", new String[]{usuario, password});
-        if (cursor.moveToFirst()) {
-            cursor.close();
-            return true;
-        } else {
-            cursor.close();
-            return false;
-        }
+    public boolean login(String NIF, String password) {
+        String hashedPswd = Utiles.generateHash(password);
+        Cursor cursor = db.rawQuery("SELECT * FROM usuarios WHERE NIF = ? AND password = ?", new String[]{NIF, hashedPswd});
+        boolean existe = cursor.moveToFirst();
+        cursor.close();
+        return existe;
     }
 
     public void votar(long[] codCandidatos) {

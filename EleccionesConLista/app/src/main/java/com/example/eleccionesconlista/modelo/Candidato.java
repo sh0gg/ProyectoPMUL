@@ -7,9 +7,11 @@ public class Candidato {
     private long codPartido;
     private int nVotos;
 
+    private String foto;
+
     public Candidato() {}
 
-    public Candidato(String nombre, String apellidos, long codPartido, int nVotos) {
+    public Candidato(String nombre, String apellidos, long codPartido, int nVotos, String foto) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.codPartido = codPartido;
@@ -55,5 +57,13 @@ public class Candidato {
 
     public void setNVotos(int nVotos) {
         this.nVotos = nVotos;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 }
