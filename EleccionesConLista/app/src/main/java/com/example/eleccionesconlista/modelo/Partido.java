@@ -6,11 +6,12 @@ public class Partido {
     private String color;
     private String logo;
 
-    public Partido() {
-    }
+    public Partido() {}
 
-    public Partido(String nombre) {
+    public Partido(String nombre, String color, String logo) {
         this.nombre = nombre;
+        this.color = color;
+        this.logo = logo;
     }
 
     // Getters y setters

@@ -1,11 +1,12 @@
 package com.example.eleccionesconlista.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.eleccionesconlista.AsistenteBD;
 import com.example.eleccionesconlista.modelo.Candidato;
+import com.example.eleccionesconlista.modelo.Partido;
 import com.example.eleccionesconlista.modelo.Usuario;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class ConexionBD {
                 candidato.setApellidos(cursor.getString(2));
                 candidato.setCodPartido(cursor.getLong(3));
                 candidato.setNVotos(cursor.getInt(4));
+                candidato.setFoto(cursor.getString(5));
                 candidatos.add(candidato);
             } while (cursor.moveToNext());
             cursor.close();
@@ -44,13 +46,42 @@ public class ConexionBD {
         return candidatos;
     }
 
+    public Partido getPartido(long codPartido) {
+        Partido partido = new Partido();
+        Cursor cursor = db.rawQuery("SELECT * FROM partidos WHERE codPartido = ?", new String[]{String.valueOf(codPartido)});
+        if (cursor.moveToFirst()) {
+            partido.setCodPartido(cursor.getLong(0));
+            partido.setNombre(cursor.getString(1));
+            partido.setColor(cursor.getString(2));
+            partido.setLogo(cursor.getString(3));
+            cursor.close();
+        }
+        return partido;
+    }
+
     public Usuario getUsuario(String usuario) {
-        Usuario user = new Usuario();
+        Usuario user = null;
         Cursor cursor = db.rawQuery("SELECT * FROM usuarios WHERE usuario = ?", new String[]{usuario});
         if (cursor.moveToFirst()) {
+            user = new Usuario();
             user.setNIF(cursor.getString(0));
             user.setUsuario(cursor.getString(1));
             user.setPassword(cursor.getString(2));
+            user.setHaVotado(cursor.getInt(3));
+            cursor.close();
+        }
+        return user;
+    }
+
+    public Usuario getUsuarioPorNif(String nif) {
+        Usuario user = null;
+        Cursor cursor = db.rawQuery("SELECT * FROM usuarios WHERE NIF = ?", new String[]{nif});
+        if (cursor.moveToFirst()) {
+            user = new Usuario();
+            user.setNIF(cursor.getString(0));
+            user.setUsuario(cursor.getString(1));
+            user.setPassword(cursor.getString(2));
+            user.setHaVotado(cursor.getInt(3));
             cursor.close();
         }
         return user;
@@ -64,14 +95,20 @@ public class ConexionBD {
         return existe;
     }
 
-    public void votar(long[] codCandidatos) {
-        for (long codCandidato : codCandidatos) {
-            Cursor cursor = db.rawQuery("SELECT * FROM candidatos WHERE codCandidato = ?", new String[]{String.valueOf(codCandidato)});
-            if (cursor.moveToFirst()) {
-                int nVotos = cursor.getInt(4) + 1;
-                db.execSQL("UPDATE candidatos SET nVotos = ? WHERE codCandidato = ?", new Object[]{nVotos, codCandidato});
+    public void votar(long[] codCandidatos, String nif) {
+        db.beginTransaction();
+        try {
+            for (long codCandidato : codCandidatos) {
+                db.execSQL("UPDATE candidatos SET nVotos = nVotos + 1 WHERE codCandidato = ?", new Object[]{codCandidato});
             }
-            cursor.close();
+            
+            ContentValues values = new ContentValues();
+            values.put("haVotado", 1);
+            db.update("usuarios", values, "NIF = ?", new String[]{nif});
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
     }
 }

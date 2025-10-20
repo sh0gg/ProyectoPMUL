@@ -1,4 +1,4 @@
-package com.example.eleccionesconlista;
+package com.example.eleccionesconlista.db;
 
 import android.content.Context;
 import android.content.ContentValues;
@@ -9,7 +9,7 @@ import com.example.eleccionesconlista.db.Utiles;
 
 public class AsistenteBD extends SQLiteOpenHelper {
     private static final String NOMBRE_BD = "elecciones.db";
-    private static final int VERSION_BD = 1;
+    private static final int VERSION_BD = 2; // Incrementar la versión de la base de datos
 
     private void insertarCandidato(SQLiteDatabase db, String nombre, String apellidos, long codPartido, String foto) {
         ContentValues candidato = new ContentValues();
@@ -26,6 +26,7 @@ public class AsistenteBD extends SQLiteOpenHelper {
         user.put("NIF", NIF);
         user.put("usuario", usuario);
         user.put("password", password);
+        user.put("haVotado", 0);
         db.insert("usuarios", null, user);
     }
 
@@ -35,9 +36,9 @@ public class AsistenteBD extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sqlCreateCandidatos = "CREATE TABLE candidatos (codCandidato INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apellidos TEXT, codPartido INTEGER, nVotos INTEGER, foto TEXT)";
+        String sqlCreateCandidatos = "CREATE TABLE candidatos (codCandidato INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, apellidos TEXT, codPartido INTEGER, nVotos INTEGER DEFAULT 0, foto TEXT)";
         String sqlCreatePartidos = "CREATE TABLE partidos (codPartido INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, color TEXT, logo TEXT)";
-        String sqlCreateUsuarios = "CREATE TABLE usuarios (NIF TEXT PRIMARY KEY, usuario TEXT, password TEXT)";
+        String sqlCreateUsuarios = "CREATE TABLE usuarios (NIF TEXT PRIMARY KEY, usuario TEXT, password TEXT, haVotado INTEGER DEFAULT 0)";
 
         db.execSQL(sqlCreateCandidatos);
         db.execSQL(sqlCreatePartidos);
@@ -53,7 +54,7 @@ public class AsistenteBD extends SQLiteOpenHelper {
         partido.clear();
         partido.put("nombre", "Partido socialmente obrero");
         partido.put("color", "f54242");
-        partido.put("logo", "logo_psoe");
+        partido.put("logo", "logo_pso");
         long idPSOE = db.insert("partidos", null, partido);
         partido.clear();
         partido.put("nombre", "Box");
@@ -86,6 +87,9 @@ public class AsistenteBD extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE usuarios ADD COLUMN haVotado INTEGER DEFAULT 0");
+        }
     }
 
 }

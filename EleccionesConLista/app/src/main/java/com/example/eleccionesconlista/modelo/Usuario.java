@@ -4,13 +4,15 @@ public class Usuario {
     private String NIF;
     private String usuario;
     private String password;
+    private int haVotado;
 
     public Usuario() {}
 
-    public Usuario(String NIF, String usuario, String password) {
+    public Usuario(String NIF, String usuario, String password, int haVotado) {
         this.NIF = NIF;
         this.usuario = usuario;
         this.password = password;
+        this.haVotado = haVotado;
     }
 
     // Getters y setters
@@ -36,5 +38,13 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getHaVotado() {
+        return haVotado;
+    }
+
+    public void setHaVotado(int haVotado) {
+        this.haVotado = haVotado;
     }
 }
