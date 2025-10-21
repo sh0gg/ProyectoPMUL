@@ -38,7 +38,7 @@ public class CandidatoAdapter extends ArrayAdapter<Candidato> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Candidato candidato = getItem(position);
-
+        // la primera vez lo hace vacio
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_candidato, parent, false);
         }
@@ -50,7 +50,7 @@ public class CandidatoAdapter extends ArrayAdapter<Candidato> {
         CheckBox chkSeleccion = convertView.findViewById(R.id.chkSeleccion);
 
 
-        // al pasarse un candidato que no sea null, empieza a llenar el adaptador con sus datos
+        // empieza a llenar el adaptador con sus datos
         if (candidato != null) {
             txtNombre.setText(candidato.getNombre() + " " + candidato.getApellidos());
 
@@ -73,7 +73,7 @@ public class CandidatoAdapter extends ArrayAdapter<Candidato> {
                 imgLogoPartido.setImageResource(R.drawable.ic_partido);
             }
 
-// lo mismo si no encuentra la foto del candidato, le pone una de placeholder
+            // lo mismo si no encuentra la foto del candidato, le pone una de placeholder
             int fotoId = Utiles.getDrawableIdByName(getContext(), "cc_" + candidato.getFoto());
             if (fotoId != 0) {
                 imgCandidato.setImageResource(fotoId);
@@ -82,7 +82,8 @@ public class CandidatoAdapter extends ArrayAdapter<Candidato> {
             }
         }
 
-// para seleccionar a quien votamos decidí usar checks y a continuación bloqueamos que se seleccionen mas de tres antes de enviar el voto
+        // para seleccionar a quien votamos decidí usar checks y a continuación bloqueamos que se
+        // seleccionen mas de tres antes de enviar el voto
 
         chkSeleccion.setOnCheckedChangeListener(null);
         chkSeleccion.setChecked(selectedCandidatos.contains(candidato));
