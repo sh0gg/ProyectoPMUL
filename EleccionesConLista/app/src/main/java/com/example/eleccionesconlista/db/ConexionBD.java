@@ -27,6 +27,12 @@ public class ConexionBD {
         db.close();
     }
 
+
+
+    // estos metodos están mal -> como comentó el profe es una gilipollez que ande a llamar a la bd
+    // cada vez que necesito un dato, debería usar un join y luego guardar estos datos por ahi.
+    // (para no ralentizar el programa, como son pocos candidatos y partidos no se nota)
+
     public ArrayList<Candidato> getCandidatos() {
         ArrayList<Candidato> candidatos = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM candidatos", null);
@@ -95,13 +101,15 @@ public class ConexionBD {
         return existe;
     }
 
+// método para votar
+
     public void votar(long[] codCandidatos, String nif) {
         db.beginTransaction();
         try {
             for (long codCandidato : codCandidatos) {
                 db.execSQL("UPDATE candidatos SET nVotos = nVotos + 1 WHERE codCandidato = ?", new Object[]{codCandidato});
             }
-            
+
             ContentValues values = new ContentValues();
             values.put("haVotado", 1);
             db.update("usuarios", values, "NIF = ?", new String[]{nif});

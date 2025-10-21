@@ -23,6 +23,8 @@ import java.util.List;
 
 public class CandidatoAdapter extends ArrayAdapter<Candidato> {
 
+// Llamamos a conexionBD para tratar con los datos de los candidatos
+
     private ConexionBD conexionBD;
     private List<Candidato> selectedCandidatos = new ArrayList<>();
 
@@ -30,6 +32,8 @@ public class CandidatoAdapter extends ArrayAdapter<Candidato> {
         super(context, 0, candidatos);
         this.conexionBD = conexionBD;
     }
+
+// Los datos que metemos en la vista y en caso de que algo falte pasa lo siguiente:
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -45,11 +49,14 @@ public class CandidatoAdapter extends ArrayAdapter<Candidato> {
         TextView txtPartido = convertView.findViewById(R.id.txtPartido);
         CheckBox chkSeleccion = convertView.findViewById(R.id.chkSeleccion);
 
+
+        // al pasarse un candidato que no sea null, empieza a llenar el adaptador con sus datos
         if (candidato != null) {
             txtNombre.setText(candidato.getNombre() + " " + candidato.getApellidos());
 
             Partido partido = conexionBD.getPartido(candidato.getCodPartido());
 
+            // en caso de no encontrar partido, pone el color rojo para el nombre y coge una imagen de placeholder
             if (partido != null) {
                 txtPartido.setText(partido.getNombre());
                 txtPartido.setTextColor(Color.parseColor("#" + partido.getColor()));
@@ -66,6 +73,7 @@ public class CandidatoAdapter extends ArrayAdapter<Candidato> {
                 imgLogoPartido.setImageResource(R.drawable.ic_partido);
             }
 
+// lo mismo si no encuentra la foto del candidato, le pone una de placeholder
             int fotoId = Utiles.getDrawableIdByName(getContext(), "cc_" + candidato.getFoto());
             if (fotoId != 0) {
                 imgCandidato.setImageResource(fotoId);
@@ -73,6 +81,8 @@ public class CandidatoAdapter extends ArrayAdapter<Candidato> {
                 imgCandidato.setImageResource(R.drawable.ic_person);
             }
         }
+
+// para seleccionar a quien votamos decidí usar checks y a continuación bloqueamos que se seleccionen mas de tres antes de enviar el voto
 
         chkSeleccion.setOnCheckedChangeListener(null);
         chkSeleccion.setChecked(selectedCandidatos.contains(candidato));
@@ -93,6 +103,7 @@ public class CandidatoAdapter extends ArrayAdapter<Candidato> {
         return convertView;
     }
 
+    // este metodo devuelve en una lista los candidatos seleccionados en la lista
     public List<Candidato> getSelectedCandidatos() {
         return selectedCandidatos;
     }
