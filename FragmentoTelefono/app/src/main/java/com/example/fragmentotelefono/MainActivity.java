@@ -10,6 +10,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Centralita centralita;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,5 +22,16 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        centralita = new Centralita();
+
+        for (int i = 1; i <= 4; i++) {
+            centralita.registrarTelefono(new Telefono(i));
+        }
+    }
+
+    // obtener la centralita (lo necesito para el fragmento)
+    public Centralita getCentralita() {
+        return centralita;
     }
 }
