@@ -11,16 +11,17 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
 public class FrgEditTextCNI extends Fragment {
     public onFragEtCNI listener = null;
-    // Handler para detectar cuando el usuario deja de escribir
-    Handler handler = new Handler();
-    Runnable typingFinishedRunnable;
     private EditText etCNI;
     private List<String> listaPalabrasMalas;
+    private StringBuilder sb = new StringBuilder();
+    private String infracciones;
+    private LocalDateTime time;
 
     public void setOnFrgEtCNI(onFragEtCNI listener) {
         this.listener = listener;
@@ -40,21 +41,16 @@ public class FrgEditTextCNI extends Fragment {
         etCNI.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable editable) {
-                // Cuando el usuario termina de escribir, esperamos un momento antes de analizar
+
                 String text = editable.toString().toLowerCase();
-
-                typingFinishedRunnable = () -> {
-                    // Buscar si hay palabras clave
-                    for (String palabra : listaPalabrasMalas) {
-                        if (text.contains(palabra.toLowerCase())) {
-
-                            break;
-                        }
+                // Buscar si hay palabras clave
+                for (String palabra : listaPalabrasMalas) {
+                    if (text.contains(palabra.toLowerCase())) {
+                        sb.append("Se ha registrado la infraccion : \"" + palabra + "\" a las " + time.toString() + "\n");
+                        break;
                     }
-                };
-
-                // Esperar un poco antes de ejecutar el análisis
-                handler.postDelayed(typingFinishedRunnable, 800);
+                }
+                infracciones = sb.toString();
             }
 
             @Override

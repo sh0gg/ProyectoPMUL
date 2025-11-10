@@ -21,7 +21,8 @@ import java.util.List;
 
 public class FragmentoFiltro extends Fragment {
 
-    private OnElementoSeleccionadoListener listener;
+    private OnElementoSeleccionadoListener elementoSeleccionadoListener;
+    private OnFiltroEditadoListener filtroEditadoListener;
     private ArrayList<String> listaOriginal;
     private boolean sensibleMayusculas;
     private ArrayAdapter<String> adaptador;
@@ -42,10 +43,17 @@ public class FragmentoFiltro extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+
         if (context instanceof OnElementoSeleccionadoListener) {
-            listener = (OnElementoSeleccionadoListener) context;
+            elementoSeleccionadoListener = (OnElementoSeleccionadoListener) context;
         } else {
             throw new ClassCastException(context.toString() + " debe implementar OnElementoSeleccionadoListener");
+        }
+
+        if (context instanceof OnFiltroEditadoListener) {
+            filtroEditadoListener = (OnFiltroEditadoListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + " debe implementar OnFiltroEditadoListener");
         }
     }
 
@@ -78,14 +86,15 @@ public class FragmentoFiltro extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                filtroEditadoListener.onFiltroEditado(s.toString(), listaFiltrada.size());
             }
         });
 
         listaVista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (listener != null) {
-                    listener.onElementoSeleccionado(listaFiltrada.get(position));
+                if (elementoSeleccionadoListener != null) {
+                    elementoSeleccionadoListener.onElementoSeleccionado(listaFiltrada.get(position));
                 }
             }
         });
@@ -134,5 +143,9 @@ public class FragmentoFiltro extends Fragment {
 
     public interface OnElementoSeleccionadoListener {
         void onElementoSeleccionado(String elemento);
+    }
+
+    public interface OnFiltroEditadoListener {
+        void onFiltroEditado(String filtro, int resultados);
     }
 }
