@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements FragmentoFiltro.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // lista de ejemplo
         ArrayList<String> lista = new ArrayList<>();
         lista.add("Manzana");
         lista.add("Mandarina");
@@ -24,11 +26,12 @@ public class MainActivity extends AppCompatActivity implements FragmentoFiltro.O
         lista.add("Fresa");
         lista.add("Uva");
 
-        FragmentoFiltro fragmento = FragmentoFiltro.newInstance(lista, false);
+        FragmentManager gestor = getSupportFragmentManager();
+        FragmentoFiltro frg = (FragmentoFiltro) gestor.findFragmentById(R.id.idFragmentoFiltro);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.contenedor, fragmento)
-                .commit();
+        if (frg != null) {
+            frg.pasarDatos(lista, false);
+        }
     }
 
     @Override

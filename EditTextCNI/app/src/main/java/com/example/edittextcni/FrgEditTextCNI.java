@@ -1,6 +1,7 @@
 package com.example.edittextcni;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,14 +14,13 @@ import androidx.fragment.app.Fragment;
 import java.util.List;
 
 
-
 public class FrgEditTextCNI extends Fragment {
+    public onFragEtCNI listener = null;
+    // Handler para detectar cuando el usuario deja de escribir
+    Handler handler = new Handler();
+    Runnable typingFinishedRunnable;
     private EditText etCNI;
     private List<String> listaPalabrasMalas;
-    public onFragEtCNI listener = null;
-    public interface onFragEtCNI {
-        boolean onTextoEncontrado(String texto);
-    }
 
     public void setOnFrgEtCNI(onFragEtCNI listener) {
         this.listener = listener;
@@ -40,7 +40,21 @@ public class FrgEditTextCNI extends Fragment {
         etCNI.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable editable) {
+                // Cuando el usuario termina de escribir, esperamos un momento antes de analizar
+                String text = editable.toString().toLowerCase();
 
+                typingFinishedRunnable = () -> {
+                    // Buscar si hay palabras clave
+                    for (String palabra : listaPalabrasMalas) {
+                        if (text.contains(palabra.toLowerCase())) {
+
+                            break;
+                        }
+                    }
+                };
+
+                // Esperar un poco antes de ejecutar el análisis
+                handler.postDelayed(typingFinishedRunnable, 800);
             }
 
             @Override
@@ -55,5 +69,8 @@ public class FrgEditTextCNI extends Fragment {
         });
     }
 
-
+    public interface onFragEtCNI {
+        boolean onTextoEncontrado(String texto);
+    }
 }
+

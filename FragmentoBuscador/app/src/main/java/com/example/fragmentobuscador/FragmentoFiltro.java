@@ -21,21 +21,22 @@ import java.util.List;
 
 public class FragmentoFiltro extends Fragment {
 
-    private static final String ARG_LISTA = "lista";
-    private static final String ARG_SENSIBLE_MAYUSCULAS = "sensible_mayusculas";
     private OnElementoSeleccionadoListener listener;
     private ArrayList<String> listaOriginal;
     private boolean sensibleMayusculas;
     private ArrayAdapter<String> adaptador;
     private List<String> listaFiltrada = new ArrayList<>();
 
-    public static FragmentoFiltro newInstance(ArrayList<String> lista, boolean sensibleMayusculas) {
-        FragmentoFiltro fragmento = new FragmentoFiltro();
-        Bundle args = new Bundle();
-        args.putStringArrayList(ARG_LISTA, lista);
-        args.putBoolean(ARG_SENSIBLE_MAYUSCULAS, sensibleMayusculas);
-        fragmento.setArguments(args);
-        return fragmento;
+
+    // para pasar los datos al fragmento
+    public void pasarDatos(ArrayList<String> lista, boolean sensibleMayusculas) {
+        this.listaOriginal = lista;
+        this.sensibleMayusculas = sensibleMayusculas;
+        listaFiltrada.clear();
+        listaFiltrada.addAll(listaOriginal);
+        if (adaptador != null) {
+            adaptador.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -57,14 +58,13 @@ public class FragmentoFiltro extends Fragment {
         EditText cajaBusqueda = vista.findViewById(R.id.cajaBusqueda);
         ListView listaVista = vista.findViewById(R.id.listaVista);
 
-        if (getArguments() != null) {
-            listaOriginal = getArguments().getStringArrayList(ARG_LISTA);
-            sensibleMayusculas = getArguments().getBoolean(ARG_SENSIBLE_MAYUSCULAS);
+        if (listaOriginal == null) {
+            listaOriginal = new ArrayList<>();
         }
-
-        listaFiltrada.addAll(listaOriginal);
-        adaptador = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, listaFiltrada);
-        listaVista.setAdapter(adaptador);
+        if (adaptador == null) {
+            adaptador = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, listaFiltrada);
+            listaVista.setAdapter(adaptador);
+        }
 
         cajaBusqueda.addTextChangedListener(new TextWatcher() {
             @Override
