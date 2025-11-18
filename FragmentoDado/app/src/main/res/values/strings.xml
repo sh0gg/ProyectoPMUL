@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">FragmentoDado</string>
+    <string name="cuantos_dados_quieres">¿Cuantos dados quieres?</string>
+    <string name="de_cuantas_caras">¿De cuantas caras?</string>
+    <string name="iniciar">Iniciar</string>
+</resources>
