@@ -1,30 +1,34 @@
 package com.example.fragmentodado;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.view.View;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-public class JuegoActivity extends AppCompatActivity {
+public class JuegoActivity extends AppCompatActivity implements FrgDado.OnRachaListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(new LinearLayout);
 
+        setContentView(new View(this));
 
+        int numDados = getIntent().getIntExtra("numDados", 1);
+        int numCaras = getIntent().getIntExtra("numCarasDados", 6);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        for (int i = 0; i < numDados; i++) {
+            FrgDado frg = FrgDado.newInstance(i, numCaras);
+            getSupportFragmentManager().beginTransaction()
+                    .add(android.R.id.content, frg, "dado" + i)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onRacha(int numDado, int resultado) {
+        Toast.makeText(this,
+                "Dado " + (numDado + 1) + " hizo racha con el número " + resultado,
+                Toast.LENGTH_SHORT).show();
     }
 }
