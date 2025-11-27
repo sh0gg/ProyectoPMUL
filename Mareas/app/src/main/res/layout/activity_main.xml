@@ -1,46 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etURL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/url"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.149"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TextFields" />
+    <Spinner
+        android:id="@+id/spPuertos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/tvURL"
-        android:layout_width="350dp"
-        android:layout_height="544dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etURL"
-        app:layout_constraintVertical_bias="0.0" />
+        android:id="@+id/tvTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mareas del puerto seleccionado"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:paddingTop="10dp"/>
 
-    <Button
-        android:id="@+id/bEnviar"
-        android:layout_width="118dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/buscar"
-        app:layout_constraintBottom_toTopOf="@+id/tvURL"
-        app:layout_constraintStart_toEndOf="@+id/etURL" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tvPleamares"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pleamares:"
+        android:paddingTop="20dp"/>
+
+    <TextView
+        android:id="@+id/tvBajamares"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bajamares:"
+        android:paddingTop="10dp"/>
+
+</LinearLayout>
