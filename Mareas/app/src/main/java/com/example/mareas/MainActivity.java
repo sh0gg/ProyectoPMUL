@@ -19,8 +19,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner spPuertos;
     TextView tvPleamares, tvBajamares;
 
-    private final String baseUrl =
-            "https://servizos.meteogalicia.gal/mgrss/predicion/mareas/jsonMareas.action?idPorto=";
+    private final String baseUrl = "https://servizos.meteogalicia.gal/mgrss/predicion/mareas/jsonMareas.action?idPorto=";
 
     private final String[] PUERTOS = {"Marín", "Vigo", "A Coruña", "Vilagarcía", "Ferrol"};
     private final int[] PUERTO_IDS = {15060, 15070, 15030, 15050, 15010};
