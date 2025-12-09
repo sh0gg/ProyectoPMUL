@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_width="wrap_content"
@@ -9,7 +10,9 @@
         android:id="@+id/bArriba"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:text="↑" />
+        android:text="↑"
+        android:textSize="24sp"
+        app:cornerRadius="0dp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -21,25 +24,36 @@
             android:id="@+id/bIzquierda"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:text="←" />
+            android:text="←"
+            android:textSize="24sp"
+            app:cornerRadius="0dp" />
 
         <Button
             android:id="@+id/bEnter"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:text="⏎" />
+            android:insetLeft="-4dp"
+            android:insetRight="-4dp"
+            android:text="⏎"
+            android:textSize="24sp"
+            app:cornerRadius="0dp"
+            app:iconPadding="16dp" />
 
         <Button
             android:id="@+id/bDerecha"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:text="→" />
+            android:text="→"
+            android:textSize="24sp"
+            app:cornerRadius="0dp" />
     </LinearLayout>
 
     <Button
         android:id="@+id/bAbajo"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:text="↓" />
+        android:text="↓"
+        android:textSize="24sp"
+        app:cornerRadius="0dp" />
 
 </LinearLayout>
