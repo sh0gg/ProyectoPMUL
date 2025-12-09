@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AsistenteBD extends SQLiteOpenHelper {
 
     public AsistenteBD(Context context) {
-        super(context, "escapes.db", null, 1);
+        super(context, "escapes.db", null, 2);
     }
 
     @Override
@@ -25,8 +25,8 @@ public class AsistenteBD extends SQLiteOpenHelper {
                 "partidas INTEGER)");
 
         db.execSQL("INSERT INTO escapes(nombre,camino) VALUES" +
-                "('Salir por el ascensor','↑↑→→')," +
-                "('Camino del baño','↓↓←←')");
+                "('Salir por el ascensor','↑→→↓')," +
+                "('Camino del baño','↑←←↓')");
 
         // ---------- NUEVAS TABLAS PARA NEB ----------
 
