@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fragment Games</string>
+
+    <string name="titulo_principal">Main screen</string>
+    <string name="label_max_errores">Max allowed mistakes:</string>
+    <string name="label_partidas_config">Games played with this config: 0</string>
+    <string name="boton_jugar_erc">Play ERC</string>
+    <string name="boton_jugar_neb">Open NEB</string>
+
+    <string name="texto_erc">Choose an Escape Room and then enter the path with the arrows. Press ENTER to check.</string>
+    <string name="label_camino_introducido">Entered path:</string>
+
+    <string name="texto_neb">Move around the bookshelf with the arrows.</string>
+    <string name="texto_sin_libro">Empty slot</string>
+
+    <string name="toast_fuera">Outside bookshelf</string>
+    <string name="toast_ganado">You escaped with %1$d mistakes (max %2$d)</string>
+    <string name="toast_perdido">You failed with %1$d mistakes (max %2$d)</string>
+    <string name="toast_sin_escape">Select an Escape Room first</string>
+    <string name="error_max_no_valido">Invalid errors number</string>
+    <string name="boton_jugar_partida">Play game</string>
+    <string name="cursores">Cursors(?)</string>
+</resources>

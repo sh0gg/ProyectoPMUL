@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fragment Juegos</string>
+
+    <string name="titulo_principal">Pantalla principal</string>
+    <string name="label_max_errores">Nº máximo de errores permitidos:</string>
+    <string name="label_partidas_config">Partidas jugadas con esta configuración: 0</string>
+    <string name="boton_jugar_erc">Jugar ERC</string>
+    <string name="boton_jugar_neb">Abrir NEB</string>
+
+    <string name="texto_erc">Elige una Escape Room y luego introduce el camino con las flechas. Pulsa ENTER para comprobar.</string>
+    <string name="label_camino_introducido">Camino introducido:</string>
+
+    <string name="texto_neb">Mueve el cursor por la estantería con las flechas.</string>
+    <string name="texto_sin_libro">Hueco vacío</string>
+
+    <string name="toast_fuera">Fuera de la estantería</string>
+    <string name="toast_ganado">Has escapado con %1$d errores (máx %2$d)</string>
+    <string name="toast_perdido">Has fallado con %1$d errores (máx %2$d)</string>
+    <string name="toast_sin_escape">Primero selecciona una Escape Room</string>
+    <string name="error_max_no_valido">Número de errores no válido</string>
+    <string name="boton_jugar_partida">Jugar partida</string>
+    <string name="cursores">Cursores</string>
+</resources>
