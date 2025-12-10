@@ -16,6 +16,7 @@ public class JuegoActivity extends AppCompatActivity implements FrgDado.OnRachaL
     FragmentManager fm;
     private int[] tiradasPorDado;
     private final int MAX_TIRADAS = 3;
+    private int numMaxTiradas = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class JuegoActivity extends AppCompatActivity implements FrgDado.OnRachaL
 
         int numDados = getIntent().getIntExtra("numDados", 1);
         int numCaras = getIntent().getIntExtra("numCarasDados", 6);
+        numMaxTiradas = getIntent().getIntExtra("numMaxTiradas", MAX_TIRADAS);
 
         tiradasPorDado = new int[numDados];
 
@@ -50,7 +52,7 @@ public class JuegoActivity extends AppCompatActivity implements FrgDado.OnRachaL
     @Override
     public void onTirar(int numDado, Button btnDado) {
         tiradasPorDado[numDado]++;
-        if (tiradasPorDado[numDado] >= MAX_TIRADAS) {
+        if (tiradasPorDado[numDado] >= numMaxTiradas) {
             btnDado.setEnabled(false);
         }
     }

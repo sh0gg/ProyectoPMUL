@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AjustesGuia</string>
+    <string name="errorGuardarAjustes">Error: datos no válidos</string>
+</resources>

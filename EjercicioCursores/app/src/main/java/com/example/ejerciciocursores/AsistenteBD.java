@@ -26,7 +26,8 @@ public class AsistenteBD extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO escapes(nombre,camino) VALUES" +
                 "('Salir por el ascensor','↑→→↓')," +
-                "('Camino del baño','↑←←↓')");
+                "('Camino del baño','↑←←↓')," +
+                "('Pito pito Gorgorito', '↑←←↓')");
 
         // ---------- NUEVAS TABLAS PARA NEB ----------
 

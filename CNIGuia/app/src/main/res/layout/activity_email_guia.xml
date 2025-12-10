@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Fragmento PARA -->
+    <fragment
+        android:id="@+id/frgPara"
+        android:name="com.cdm.cniguia.FrgEditTextCniGuia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Fragmento ASUNTO -->
+    <fragment
+        android:id="@+id/frgAsunto"
+        android:name="com.cdm.cniguia.FrgEditTextCniGuia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Fragmento CUERPO -->
+    <fragment
+        android:id="@+id/frgCuerpo"
+        android:name="com.cdm.cniguia.FrgEditTextCniGuia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

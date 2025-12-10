@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">TelefonosGuia</string>
+    <string name="num_telefono_incorrecto">Número de teléfono incorrecto</string>
+    <string name="aceptaLlamada">Acepta llamada</string>
+    <string name="comunicando">Comunicando</string>
+</resources>

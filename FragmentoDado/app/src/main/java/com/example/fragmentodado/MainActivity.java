@@ -17,17 +17,21 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tvNumDados = findViewById(R.id.tvNumDados);
         TextView tvNumCarasDados = findViewById(R.id.tvNumCarasDados);
+        TextView tvNumMaxTiradas = findViewById(R.id.tvNumMaxTiradas);
         EditText etNumDados = findViewById(R.id.etNumDados);
         EditText etNumCarasDados = findViewById(R.id.etNumCarasDados);
+        EditText etNumMaxTiradas = findViewById(R.id.etNumMaxTiradas);
         Button bStart = findViewById(R.id.bStart);
 
         bStart.setOnClickListener(v -> {
             int numDados = Integer.parseInt(etNumDados.getText().toString());
             int numCarasDados = Integer.parseInt(etNumCarasDados.getText().toString());
+            int numMaxTiradas = Integer.parseInt(etNumMaxTiradas.getText().toString());
 
             Intent intent = new Intent(MainActivity.this, JuegoActivity.class);
             intent.putExtra("numDados", numDados);
             intent.putExtra("numCarasDados", numCarasDados);
+            intent.putExtra("numMaxTiradas", numMaxTiradas);
             startActivity(intent);
         });
     }
