@@ -52,6 +52,9 @@ public class AsistenteBD extends SQLiteOpenHelper {
                 "FOREIGN KEY (idCanal) REFERENCES canales(id)" +
                 ")");
 
+
+
+
         // Datos de ejemplo
 
         Canal laUno = new Canal("La 1", "PUBLICO", "launo", 0, 0);
@@ -84,7 +87,7 @@ public class AsistenteBD extends SQLiteOpenHelper {
         numSuscripciones.add(2);
         numSuscripciones.add(3);
 
-        Bar bar = new Bar("Bar Pepe", 3, canalesSuscritos, numSuscripciones);
+        Bar bar = new Bar("Bar Pepe", 3);
         db.execSQL("INSERT INTO bar (nombre, numTeles) VALUES ('" + bar.getNombre() + "', " + bar.getNumTeles() + ")");
 
         for (Canal c : canalesSuscritos) {

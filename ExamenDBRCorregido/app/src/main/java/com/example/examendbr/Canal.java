@@ -1,15 +1,11 @@
 package com.example.examendbr;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Canal {
     private String nombre;
-    private String disponibilidad;
-    private String imagen;
-    private int cuota;
-    private int precioPorPantalla;
-    private List<Suscripcion> suscripciones;
+    private String disponibilidad;   // "PUBLICO" o "PAGO"
+    private String imagen;           // nombre del drawable
+    private int cuota;               // cuota fija
+    private int precioPorPantalla;   // precio por pantalla
 
     public Canal(String nombre, String disponibilidad, String imagen, int cuota, int precioPorPantalla) {
         this.nombre = nombre;
@@ -17,7 +13,6 @@ public class Canal {
         this.imagen = imagen;
         this.cuota = cuota;
         this.precioPorPantalla = precioPorPantalla;
-        this.suscripciones = new ArrayList<>();
     }
 
     public String getNombre() {
@@ -58,24 +53,5 @@ public class Canal {
 
     public void setPrecioPorPantalla(int precioPorPantalla) {
         this.precioPorPantalla = precioPorPantalla;
-    }
-    public List<Suscripcion> getSuscripciones() {
-        return suscripciones;
-    }
-
-    public void addSuscripcion(Bar bar, int numTeles) {
-        Suscripcion sus = new Suscripcion(bar, this, numTeles);
-        this.suscripciones.add(sus);
-        if (!bar.hasSuscripcion(sus)) {
-            bar.addSuscripcion(sus);
-        }
-    }
-
-    public void addSuscripcion(Suscripcion sus) {
-        this.suscripciones.add(sus);
-    }
-
-    public boolean hasSuscripcion(Suscripcion sus) {
-        return this.suscripciones.contains(sus);
     }
 }
