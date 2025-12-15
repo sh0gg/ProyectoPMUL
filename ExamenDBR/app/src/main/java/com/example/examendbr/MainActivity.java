@@ -1,5 +1,7 @@
 package com.example.examendbr;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -8,13 +10,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements FrgTelevision.onFrgTelevisionListener,FrgTelevision.onFrgTelevisionBClick {
+public class MainActivity extends AppCompatActivity implements FrgTelevision.onFrgTelevisionListener, FrgTelevision.onFrgTelevisionBClick {
+
+    Bar bar;
+
+    AsistenteBD aBD;
 
     TextView tvBar;
     FrgTelevision frgTele1;
@@ -22,12 +26,41 @@ public class MainActivity extends AppCompatActivity implements FrgTelevision.onF
     FrgTelevision frgTele3;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        aBD = new AsistenteBD(this);
+        SQLiteDatabase db = aBD.getReadableDatabase();
+
+        Cursor c = db.rawQuery("SELECT nombre, numTeles FROM bar", null);
+        int colIndexNombre = c.getColumnIndex("nombre");
+        int colIndexNumTeles = c.getColumnIndex("numTeles");
+        String nombre = c.getString(colIndexNombre);
+        int numTeles = c.getInt(colIndexNumTeles);
+        c.close();
+
+        bar = new Bar(nombre, numTeles);
+
+        c = db.rawQuery("SELECT id, nombre, disponibilidad, imagen, cuota, precioPorPantalla FROM canales", null);
+        int colIndexId = c.getColumnIndex("id");
+        int colIndexNombre = c.getColumnIndex("nombre");
+        int colIndex
+        int colIndex
+        int colIndex
+        int colIndex
+
+
+        c = db.rawQuery("SELECT nombre, numTeles FROM barCanales", null);
+        int colIndexNombre = c.getColumnIndex("nombre");
+        int colIndexNumTeles = c.getColumnIndex("numTeles");
+        String nombre = c.getString(colIndexNombre);
+        int numTeles = c.getInt(colIndexNumTeles);
+        c.close();
+
+        bar.addSuscripcion(, );
 
         tvBar = findViewById(R.id.tvBar);
         String str = AsistenteBD.getNombreBar(1);
@@ -37,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements FrgTelevision.onF
         frgTele1 = (FrgTelevision) fm.findFragmentById(R.id.frgTele1);
         frgTele2 = (FrgTelevision) fm.findFragmentById(R.id.frgTele2);
         frgTele3 = (FrgTelevision) fm.findFragmentById(R.id.frgTele3);
-
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

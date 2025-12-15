@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
         }
         tv.setText(sb.toString());
         setContentView(tv);
+        addLinea("OnCreate");
     }
 
     @Override protected void onStart() { super.onStart(); addLinea("onStart"); }
