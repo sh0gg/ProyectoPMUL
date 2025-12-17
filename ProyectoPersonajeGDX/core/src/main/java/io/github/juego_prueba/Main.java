@@ -2,11 +2,7 @@ package io.github.juego_prueba;
 
 import static com.badlogic.gdx.Input.Keys.A;
 import static com.badlogic.gdx.Input.Keys.D;
-import static com.badlogic.gdx.Input.Keys.DOWN;
-import static com.badlogic.gdx.Input.Keys.LEFT;
-import static com.badlogic.gdx.Input.Keys.RIGHT;
 import static com.badlogic.gdx.Input.Keys.S;
-import static com.badlogic.gdx.Input.Keys.UP;
 import static com.badlogic.gdx.Input.Keys.W;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -61,31 +57,34 @@ public class Main extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
         stateTime += delta;
-        
-        if (Gdx.input.isKeyPressed(A) || Gdx.input.isKeyPressed(LEFT)) {
+
+
+        Input.Keys[] keys = Input.Keys.class.getEnumConstants();
+
+        if (Gdx.input.isKeyPressed(A)) {
             x -= speedX * delta;
         }
-        if (Gdx.input.isKeyPressed(D) || Gdx.input.isKeyPressed(RIGHT)) {
+        if (Gdx.input.isKeyPressed(D)) {
             x += speedX * delta;
         }
-        if (Gdx.input.isKeyPressed(W) || Gdx.input.isKeyPressed(UP)) {
+        if (Gdx.input.isKeyPressed(W)) {
             y += speedY * delta;
         }
-        if (Gdx.input.isKeyPressed(S) || Gdx.input.isKeyPressed(DOWN)) {
+        if (Gdx.input.isKeyPressed(S)) {
             y -= speedY * delta;
         }
 
-
-        // Cambio de dirección si choca contra los bordes
+        // Rebotes
         if (x <= 0 || x + logoWidth >= Gdx.graphics.getWidth()) {
             speedX *= -1;
-            image.flip(true, false);
+            image.flip(random.nextBoolean(), false);
             logoWidth = image.getWidth();
             logoHeight = image.getHeight();
             // changeBackgroundColor();
         }
         if (y <= 0 || y + logoHeight >= Gdx.graphics.getHeight()) {
             speedY *= -1;
+            image.flip(random.nextBoolean(), false);
             logoWidth = image.getWidth();
             logoHeight = image.getHeight();
             // changeBackgroundColor();
@@ -107,5 +106,3 @@ public class Main extends ApplicationAdapter {
         image.getTexture().dispose();
     }
 }
-
-

@@ -1,17 +1,7 @@
 package io.github.juego_prueba;
 
-import static com.badlogic.gdx.Input.Keys.A;
-import static com.badlogic.gdx.Input.Keys.D;
-import static com.badlogic.gdx.Input.Keys.DOWN;
-import static com.badlogic.gdx.Input.Keys.LEFT;
-import static com.badlogic.gdx.Input.Keys.RIGHT;
-import static com.badlogic.gdx.Input.Keys.S;
-import static com.badlogic.gdx.Input.Keys.UP;
-import static com.badlogic.gdx.Input.Keys.W;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,10 +10,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.Random;
 
-public class Main extends ApplicationAdapter {
+public class MainOrg extends ApplicationAdapter {
 
     private SpriteBatch batch;
     private Sprite image;
+    private Texture[] imageList;
 
     // Posición
     private float x = 100;
@@ -35,6 +26,7 @@ public class Main extends ApplicationAdapter {
 
     private float logoWidth;
     private float logoHeight;
+    private Color[] bgColors;
     private Color currentBg;
 
     private float stateTime;
@@ -48,12 +40,27 @@ public class Main extends ApplicationAdapter {
 
         random = new Random();
 
-        image = new Sprite(new Texture("isaac.png"));
+        imageList = new Texture[]{
+            new Texture("gnomes.gif"),
+            new Texture("libgdx.png"),
+            new Texture("isaac.png"),
+        };
+
+        image = new Sprite(imageList[0]);
 
         logoWidth = image.getWidth();
         logoHeight = image.getHeight();
 
-        currentBg = new Color(0.1f, 0.1f, 0.2f, 1);
+        bgColors = new Color[]{
+            new Color(0.1f, 0.1f, 0.2f, 1),
+            new Color(0.2f, 0.6f, 0.3f, 1),
+            new Color(0.6f, 0.2f, 0.2f, 1),
+            new Color(0.6f, 0.6f, 0.2f, 1),
+            new Color(0.4f, 0.2f, 0.6f, 1),
+            new Color(0.1f, 0.5f, 0.6f, 1)
+        };
+
+        currentBg = bgColors[0];
     }
 
     @Override
@@ -61,36 +68,45 @@ public class Main extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
         stateTime += delta;
-        
-        if (Gdx.input.isKeyPressed(A) || Gdx.input.isKeyPressed(LEFT)) {
-            x -= speedX * delta;
-        }
-        if (Gdx.input.isKeyPressed(D) || Gdx.input.isKeyPressed(RIGHT)) {
-            x += speedX * delta;
-        }
-        if (Gdx.input.isKeyPressed(W) || Gdx.input.isKeyPressed(UP)) {
-            y += speedY * delta;
-        }
-        if (Gdx.input.isKeyPressed(S) || Gdx.input.isKeyPressed(DOWN)) {
-            y -= speedY * delta;
-        }
 
+        // Movimiento tipo DVD
+        x += speedX * delta;
+        y += speedY * delta;
 
-        // Cambio de dirección si choca contra los bordes
+        // Rebotes
         if (x <= 0 || x + logoWidth >= Gdx.graphics.getWidth()) {
             speedX *= -1;
-            image.flip(true, false);
+            changeImage();
+            image.flip(random.nextBoolean(), false);
             logoWidth = image.getWidth();
             logoHeight = image.getHeight();
             // changeBackgroundColor();
         }
         if (y <= 0 || y + logoHeight >= Gdx.graphics.getHeight()) {
             speedY *= -1;
+            changeImage();
+            image.flip(random.nextBoolean(), false);
             logoWidth = image.getWidth();
             logoHeight = image.getHeight();
             // changeBackgroundColor();
         }
 
+        switch ((int) stateTime % 4) {
+            case 0:
+                currentBg = bgColors[1];
+                break;
+            case 1:
+                currentBg = bgColors[2];
+                break;
+            case 2:
+                currentBg = bgColors[3];
+                break;
+            case 3:
+                currentBg = bgColors[4];
+                break;
+            default:
+                currentBg = bgColors[0];
+        }
 
         // Limpiar pantalla con color actual
         ScreenUtils.clear(currentBg);
@@ -100,12 +116,20 @@ public class Main extends ApplicationAdapter {
         batch.end();
     }
 
+    private void changeBackgroundColor() {
+        currentBg = bgColors[random.nextInt(bgColors.length)];
+    }
+
+    private void changeImage() {
+        image = new Sprite(imageList[random.nextInt(imageList.length)]);
+    }
 
     @Override
     public void dispose() {
         batch.dispose();
-        image.getTexture().dispose();
+        for (Texture texture : imageList) {
+            texture.dispose();
+        }
     }
 }
-
 
