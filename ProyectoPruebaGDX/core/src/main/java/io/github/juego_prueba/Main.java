@@ -7,6 +7,7 @@ import static com.badlogic.gdx.Input.Keys.H;
 import static com.badlogic.gdx.Input.Keys.LEFT;
 import static com.badlogic.gdx.Input.Keys.RIGHT;
 import static com.badlogic.gdx.Input.Keys.S;
+import static com.badlogic.gdx.Input.Keys.SPACE;
 import static com.badlogic.gdx.Input.Keys.UP;
 import static com.badlogic.gdx.Input.Keys.W;
 
@@ -17,17 +18,23 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.InputProcessor;
 
 import java.util.Random;
 
-public class Main extends ApplicationAdapter {
+public class Main extends ApplicationAdapter implements InputProcessor {
 
     private SpriteBatch batch;
-    private Sprite image;
+    private Sprite personaje;
+    private Sprite gomuba;
 
     // Posición
     private float x = 100;
     private float y = 100;
+
+    private float xEnemigo = 400;
+    private float yEnemigo = 100;
+
 
     // Velocidad
     private float speedX = 400f;
@@ -40,9 +47,12 @@ public class Main extends ApplicationAdapter {
     private boolean isGrounded = false;
     private boolean isFalling = false;
 
-    private float logoWidth;
-    private float logoHeight;
+    private float personajeWidth;
+    private float personajeHeight;
+    private float gomubaWidth;
+    private float gomubaHeight;
     private Color currentBg;
+    private int lastDirection = 1;
 
     private float stateTime;
 
@@ -57,6 +67,12 @@ public class Main extends ApplicationAdapter {
         {150, 450, 180, 20}
     };
 
+    // Variables de entrada
+    private boolean movingLeft = false;
+    private boolean movingRight = false;
+    private boolean jumping = false;
+    private boolean groundPound = false;
+    private boolean doingAction = false;
 
     @Override
     public void create() {
@@ -65,15 +81,23 @@ public class Main extends ApplicationAdapter {
 
         random = new Random();
 
-        image = new Sprite(new Texture("grounded.png"));
+        personaje = new Sprite(new Texture("grounded.png"));
+        gomuba = new Sprite(new Texture("gomuba.png"));
 
-        image.setSize(image.getWidth() * 0.5f, image.getHeight() * 0.5f);
-        logoWidth = image.getWidth();
-        logoHeight = image.getHeight();
+        personaje.setSize(personaje.getWidth() * 0.5f, personaje.getHeight() * 0.5f);
+        personajeWidth = personaje.getWidth();
+        personajeHeight = personaje.getHeight();
+
+        gomuba.setSize(gomuba.getWidth() * 0.5f, gomuba.getHeight() * 0.5f);
+        gomubaWidth = gomuba.getWidth();
+        gomubaHeight = gomuba.getHeight();
 
         whitePixel = new Texture("white.png");
 
         currentBg = new Color(0.6f, 0.2f, 0.1f, 1);
+
+        // Registramos el InputProcessor
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -88,39 +112,31 @@ public class Main extends ApplicationAdapter {
 
         if (isFalling) {
             isGrounded = false;
-            image = new Sprite(new Texture("falling.png"));
+            personaje = new Sprite(new Texture("falling.png"));
         }
 
         if (isGrounded) {
-            image = new Sprite(new Texture("grounded.png"));
+            personaje = new Sprite(new Texture("grounded.png"));
         }
 
         if (!isGrounded && !isFalling) {
-            image = new Sprite(new Texture("jumping.png"));
-        }
-
-        // Movimiento
-        if (Gdx.input.isKeyPressed(A) || Gdx.input.isKeyPressed(LEFT)) {
-            x -= speedX * delta;
-        }
-        if (Gdx.input.isKeyPressed(D) || Gdx.input.isKeyPressed(RIGHT)) {
-            x += speedX * delta;
+            personaje = new Sprite(new Texture("jumping.png"));
         }
 
         // Salto
-        if ((Gdx.input.isKeyJustPressed(W) || Gdx.input.isKeyJustPressed(UP)) && isGrounded) {
+        if (jumping && isGrounded) {
             velocityY = jumpForce;
             isGrounded = false;
         }
 
-        // GROUND POUND ?!?
-        if ((Gdx.input.isKeyJustPressed(S) || Gdx.input.isKeyJustPressed(DOWN)) && !isGrounded) {
+        // GROUND POUND!!!
+        if (groundPound && !isGrounded) {
             velocityY = -jumpForce;
         }
 
-        // FUCK YOU !!
-        if (Gdx.input.isKeyPressed(H) && isGrounded && !isFalling) {
-            image = new Sprite(new Texture("fuckyou.png"));
+        // Cambiar a imagen de acción
+        if (doingAction && isGrounded && !isFalling) {
+            personaje = new Sprite(new Texture("fuckyou.png"));
         }
 
         // Aplicar gravedad
@@ -134,6 +150,31 @@ public class Main extends ApplicationAdapter {
             isGrounded = true;
         }
 
+        // Movimiento
+        if (movingLeft) {
+            x -= speedX * delta;
+            lastDirection = 0;  // Última dirección fue izquierda
+        }
+        if (movingRight) {
+            x += speedX * delta;
+            lastDirection = 1;  // Última dirección fue derecha
+        }
+
+        // Mantener la dirección cuando no se mueve
+        if (!movingLeft && !movingRight) {
+            if (lastDirection == 0) {
+                personaje.flip(true, false);  // Mira hacia la izquierda
+            } else {
+                personaje.flip(false, false);  // Mira hacia la derecha
+            }
+        } else {
+            if (lastDirection == 0) {
+                personaje.flip(true, false);  // Mira hacia la izquierda
+            } else {
+                personaje.flip(false, false);  // Mira hacia la derecha
+            }
+        }
+
         // Colisión con plataformas
         for (float[] p : platforms) {
             float px = p[0];
@@ -141,7 +182,7 @@ public class Main extends ApplicationAdapter {
             float pw = p[2];
             float ph = p[3];
 
-            boolean overlapX = x + logoWidth > px && x < px + pw;
+            boolean overlapX = x + personajeWidth > px && x < px + pw;
             boolean falling = velocityY <= 0;
             boolean closeToTop = y <= py + ph && y >= py + ph - 20;
 
@@ -156,14 +197,20 @@ public class Main extends ApplicationAdapter {
         if (x <= 0) {
             x = 0;
         }
-        if (x + logoWidth >= Gdx.graphics.getWidth()) {
-            x = Gdx.graphics.getWidth() - logoWidth;
+        if (x + personajeWidth >= Gdx.graphics.getWidth()) {
+            x = Gdx.graphics.getWidth() - personajeWidth;
+        }
+
+        if (x + gomubaWidth >= Gdx.graphics.getWidth()) {
+            x = Gdx.graphics.getWidth() - gomubaWidth;
         }
 
         ScreenUtils.clear(currentBg);
 
         batch.begin();
-        batch.draw(image, x, y, logoWidth, logoHeight);
+        batch.draw(personaje, x, y, personajeWidth, personajeHeight);
+        batch.draw(gomuba, xEnemigo, yEnemigo, gomubaWidth, gomubaHeight);
+
         // Dibujar plataformas
         for (float[] p : platforms) {
             batch.draw(whitePixel, p[0], p[1], p[2], p[3]);
@@ -171,13 +218,100 @@ public class Main extends ApplicationAdapter {
         batch.end();
     }
 
-
     @Override
     public void dispose() {
         whitePixel.dispose();
         batch.dispose();
-        image.getTexture().dispose();
+        personaje.getTexture().dispose();
+    }
+
+    // InputProcessor
+    @Override
+    public boolean keyDown(int keycode) {
+        switch (keycode) {
+            case W:
+            case UP:
+            case SPACE:
+                jumping = true;
+                break;
+            case S:
+            case DOWN:
+                groundPound = true;
+                break;
+            case H:
+                doingAction = true;
+                break;
+            case A:
+            case LEFT:
+                movingLeft = true;
+                break;
+            case D:
+            case RIGHT:
+                movingRight = true;
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        switch (keycode) {
+            case W:
+            case UP:
+            case SPACE:
+                jumping = false;
+                break;
+            case S:
+            case DOWN:
+                groundPound = false;
+                break;
+            case H:
+                doingAction = false;
+                break;
+            case A:
+            case LEFT:
+                movingLeft = false;
+                break;
+            case D:
+            case RIGHT:
+                movingRight = false;
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
     }
 }
-
-
