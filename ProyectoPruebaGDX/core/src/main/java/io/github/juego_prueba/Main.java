@@ -1,102 +1,68 @@
 package io.github.juego_prueba;
 
-import static com.badlogic.gdx.Input.Keys.A;
-import static com.badlogic.gdx.Input.Keys.D;
-import static com.badlogic.gdx.Input.Keys.DOWN;
-import static com.badlogic.gdx.Input.Keys.H;
-import static com.badlogic.gdx.Input.Keys.LEFT;
-import static com.badlogic.gdx.Input.Keys.RIGHT;
-import static com.badlogic.gdx.Input.Keys.S;
-import static com.badlogic.gdx.Input.Keys.SPACE;
-import static com.badlogic.gdx.Input.Keys.UP;
-import static com.badlogic.gdx.Input.Keys.W;
+import static com.badlogic.gdx.Input.Keys.*;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.InputProcessor;
-
-import java.util.Random;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Main extends ApplicationAdapter implements InputProcessor {
 
     private SpriteBatch batch;
-    private Sprite personaje;
-    private Sprite gomuba;
-
-    // Posición
-    private float x = 100;
-    private float y = 100;
-
-    private float xEnemigo = 400;
-    private float yEnemigo = 100;
-
-
-    // Velocidad
-    private float speedX = 400f;
-    private float speedY = 300f;
-
-    // Física
-    private float velocityY = 0;
-    private float gravity = -2000f;     // fuerza de gravedad
-    private float jumpForce = 900f;      // fuerza del salto
-    private boolean isGrounded = false;
-    private boolean isFalling = false;
-
-    private float personajeWidth;
-    private float personajeHeight;
-    private float gomubaWidth;
-    private float gomubaHeight;
-    private Color currentBg;
-    private int lastDirection = 1;
-
-    private float stateTime;
-
-    private Random random;
+    private Personaje personaje;
 
     private Texture whitePixel;
+    private boolean gameOver = false;
+    private BitmapFont font;
 
-    // Plataformas
+    private OrthographicCamera camera;
+    private FitViewport viewport;
+
+    private boolean movingLeft, movingRight, jumping, groundPound;
+
     private float[][] platforms = {
         {200, 150, 200, 20},
         {500, 300, 250, 20},
-        {150, 450, 180, 20}
+        {150, 450, 180, 20},
+        {600, 600, 220, 20},
+        {800, 750, 250, 20},
+        {1200, 900, 180, 20},
+        {1500, 1050, 220, 20}
     };
 
-    // Variables de entrada
-    private boolean movingLeft = false;
-    private boolean movingRight = false;
-    private boolean jumping = false;
-    private boolean groundPound = false;
-    private boolean doingAction = false;
+    private Enemigo[] enemigos = {
+        new Enemigo(400, 100),
+        new Enemigo(1000, 300),
+        new Enemigo(1500, 600),
+        new Enemigo(2000, 400),
+        new Enemigo(2200, 800),
+    };
+
 
     @Override
     public void create() {
-        stateTime = 0;
         batch = new SpriteBatch();
 
-        random = new Random();
-
-        personaje = new Sprite(new Texture("grounded.png"));
-        gomuba = new Sprite(new Texture("gomuba.png"));
-
-        personaje.setSize(personaje.getWidth() * 0.5f, personaje.getHeight() * 0.5f);
-        personajeWidth = personaje.getWidth();
-        personajeHeight = personaje.getHeight();
-
-        gomuba.setSize(gomuba.getWidth() * 0.5f, gomuba.getHeight() * 0.5f);
-        gomubaWidth = gomuba.getWidth();
-        gomubaHeight = gomuba.getHeight();
+        personaje = new Personaje(100, 100);
 
         whitePixel = new Texture("white.png");
 
-        currentBg = new Color(0.6f, 0.2f, 0.1f, 1);
+        font = new BitmapFont();
+        font.getData().setScale(2f);
 
-        // Registramos el InputProcessor
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        camera.position.set(personaje.x + personaje.width / 2, personaje.y + personaje.height / 2, 0);
+        camera.update();
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -104,114 +70,127 @@ public class Main extends ApplicationAdapter implements InputProcessor {
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        if (velocityY < 0) {
-            isFalling = true;
-        } else {
-            isFalling = false;
+        // INPUT
+        if (!personaje.dead) {
+            if (movingLeft) personaje.moveLeft(delta);
+            if (movingRight) personaje.moveRight(delta);
+            if (jumping) personaje.jump();
+            if (groundPound) personaje.groundPound();
         }
 
-        if (isFalling) {
-            isGrounded = false;
-            personaje = new Sprite(new Texture("falling.png"));
+
+        // UPDATE
+        personaje.update(delta);
+
+        // Actualizar enemigos (les pasamos la cámara)
+        for (Enemigo enemigo : enemigos) {
+            enemigo.update(delta, camera);
         }
 
-        if (isGrounded) {
-            personaje = new Sprite(new Texture("grounded.png"));
-        }
-
-        if (!isGrounded && !isFalling) {
-            personaje = new Sprite(new Texture("jumping.png"));
-        }
-
-        // Salto
-        if (jumping && isGrounded) {
-            velocityY = jumpForce;
-            isGrounded = false;
-        }
-
-        // GROUND POUND!!!
-        if (groundPound && !isGrounded) {
-            velocityY = -jumpForce;
-        }
-
-        // Cambiar a imagen de acción
-        if (doingAction && isGrounded && !isFalling) {
-            personaje = new Sprite(new Texture("fuckyou.png"));
-        }
-
-        // Aplicar gravedad
-        velocityY += gravity * delta;
-        y += velocityY * delta;
-
-        // Suelo
-        if (y <= 0) {
-            y = 0;
-            velocityY = 0;
-            isGrounded = true;
-        }
-
-        // Movimiento
-        if (movingLeft) {
-            x -= speedX * delta;
-            lastDirection = 0;  // Última dirección fue izquierda
-        }
-        if (movingRight) {
-            x += speedX * delta;
-            lastDirection = 1;  // Última dirección fue derecha
-        }
-
-        // Mantener la dirección cuando no se mueve
-        if (!movingLeft && !movingRight) {
-            if (lastDirection == 0) {
-                personaje.flip(true, false);  // Mira hacia la izquierda
-            } else {
-                personaje.flip(false, false);  // Mira hacia la derecha
-            }
-        } else {
-            if (lastDirection == 0) {
-                personaje.flip(true, false);  // Mira hacia la izquierda
-            } else {
-                personaje.flip(false, false);  // Mira hacia la derecha
+        // Dibujar enemigos
+        for (Enemigo enemigo : enemigos) {
+            if (!enemigo.remove && enemigo.isVisible()) {
+                batch.draw(enemigo.sprite, enemigo.x, enemigo.y, enemigo.width, enemigo.height);
             }
         }
 
-        // Colisión con plataformas
-        for (float[] p : platforms) {
-            float px = p[0];
-            float py = p[1];
-            float pw = p[2];
-            float ph = p[3];
+        if (personaje.dead && personaje.y + personaje.height < 0) {
+            gameOver = true;
+        }
 
-            boolean overlapX = x + personajeWidth > px && x < px + pw;
-            boolean falling = velocityY <= 0;
-            boolean closeToTop = y <= py + ph && y >= py + ph - 20;
+        // COLISIÓN JUGADOR - ENEMIGO
+        if (!personaje.dead) {
+            for (Enemigo enemigo : enemigos) {
+                if (enemigo.alive) {  // Solo verificamos enemigos vivos
 
-            if (overlapX && falling && closeToTop) {
-                y = py + ph;
-                velocityY = 0;
-                isGrounded = true;
+                    boolean overlapX =
+                        personaje.x < enemigo.x + enemigo.width &&
+                            personaje.x + personaje.width > enemigo.x;
+
+                    boolean overlapY =
+                        personaje.y < enemigo.y + enemigo.height &&
+                            personaje.y + personaje.height > enemigo.y;
+
+                    if (overlapX && overlapY) {
+
+                        boolean stomp =
+                            personaje.velocityY < 0 &&
+                                personaje.y > enemigo.y + enemigo.height / 2;
+
+                        if (stomp) {
+                            enemigo.die();
+                            personaje.velocityY = 600f;
+                        } else {
+                            personaje.die();
+                        }
+                    }
+                }
             }
         }
 
-        // Límites laterales
-        if (x <= 0) {
-            x = 0;
-        }
-        if (x + personajeWidth >= Gdx.graphics.getWidth()) {
-            x = Gdx.graphics.getWidth() - personajeWidth;
+
+
+        // Plataformas
+        if (!personaje.dead) {
+            for (float[] p : platforms) {
+                float px = p[0];
+                float py = p[1];
+                float pw = p[2];
+                float ph = p[3];
+
+                boolean overlapX = personaje.x + personaje.width > px && personaje.x < px + pw;
+                boolean falling = personaje.velocityY <= 0;
+                boolean closeTop = personaje.y <= py + ph && personaje.y >= py + ph - 20;
+
+                if (overlapX && falling && closeTop) {
+                    personaje.y = py + ph;
+                    personaje.velocityY = 0;
+                    personaje.isGrounded = true;
+                }
+            }
         }
 
-        if (x + gomubaWidth >= Gdx.graphics.getWidth()) {
-            x = Gdx.graphics.getWidth() - gomubaWidth;
+
+        ScreenUtils.clear(new Color(0.6f, 0.2f, 0.1f, 1));
+
+        if (gameOver) {
+            ScreenUtils.clear(Color.BLACK);
+
+            batch.begin();
+            font.draw(batch,
+                "HAS MUERTO\n\nPRESIONA ENTER PARA REINICIAR",
+                Gdx.graphics.getWidth() / 2f - 200,
+                Gdx.graphics.getHeight() / 2f
+            );
+            batch.end();
+
+            return;
         }
 
-        ScreenUtils.clear(currentBg);
+        // Limitar los bordes de la cámara para no salir del mapa
+        float maxX = Math.max(Gdx.graphics.getWidth(), 2000);  // Tamaño máximo del mapa
+        float maxY = 1200;  // Altura máxima del mapa
 
+        camera.position.x = MathUtils.clamp(camera.position.x, Gdx.graphics.getWidth() / 2f, maxX - Gdx.graphics.getWidth() / 2f);
+        camera.position.y = MathUtils.clamp(camera.position.y, Gdx.graphics.getHeight() / 2f, maxY - Gdx.graphics.getHeight() / 2f);
+
+
+        // Actualizar la cámara para que siga al personaje
+        camera.position.set(personaje.x + personaje.width / 2, personaje.y + personaje.height / 2, 0);
+        camera.update();
+
+        // Establecer la matriz de proyección para el SpriteBatch
+        batch.setProjectionMatrix(camera.combined);
+
+        // Dibujar personajes y plataformas
         batch.begin();
-        batch.draw(personaje, x, y, personajeWidth, personajeHeight);
-        batch.draw(gomuba, xEnemigo, yEnemigo, gomubaWidth, gomubaHeight);
+        batch.draw(personaje.sprite, personaje.x, personaje.y, personaje.width, personaje.height);
+        for (Enemigo enemigo : enemigos) {
+            if (!enemigo.remove && enemigo.isVisible()) {
+                batch.draw(enemigo.sprite, enemigo.x, enemigo.y, enemigo.width, enemigo.height);
+            }
+        }
 
-        // Dibujar plataformas
         for (float[] p : platforms) {
             batch.draw(whitePixel, p[0], p[1], p[2], p[3]);
         }
@@ -220,78 +199,43 @@ public class Main extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void dispose() {
-        whitePixel.dispose();
         batch.dispose();
-        personaje.getTexture().dispose();
+        whitePixel.dispose();
     }
 
-    // InputProcessor
+    // INPUT
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case W:
-            case UP:
-            case SPACE:
-                jumping = true;
-                break;
-            case S:
-            case DOWN:
-                groundPound = true;
-                break;
-            case H:
-                doingAction = true;
-                break;
-            case A:
-            case LEFT:
-                movingLeft = true;
-                break;
-            case D:
-            case RIGHT:
-                movingRight = true;
-                break;
+        if (keycode == A || keycode == LEFT) movingLeft = true;
+        if (keycode == D || keycode == RIGHT) movingRight = true;
+        if (keycode == W || keycode == UP || keycode == SPACE) jumping = true;
+        if (keycode == S || keycode == DOWN) groundPound = true;
+        if (gameOver && keycode == ENTER) {
+            dispose();
+            create();
         }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        switch (keycode) {
-            case W:
-            case UP:
-            case SPACE:
-                jumping = false;
-                break;
-            case S:
-            case DOWN:
-                groundPound = false;
-                break;
-            case H:
-                doingAction = false;
-                break;
-            case A:
-            case LEFT:
-                movingLeft = false;
-                break;
-            case D:
-            case RIGHT:
-                movingRight = false;
-                break;
-        }
+        if (keycode == A || keycode == LEFT) movingLeft = false;
+        if (keycode == D || keycode == RIGHT) movingRight = false;
+        if (keycode == W || keycode == UP || keycode == SPACE) jumping = false;
+        if (keycode == S || keycode == DOWN) groundPound = false;
         return false;
     }
 
-    @Override
-    public boolean keyTyped(char character) {
+    // Métodos no usados
+    public boolean keyTyped(char c) {
         return false;
     }
 
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public boolean touchDown(int x, int y, int p, int b) {
         return false;
     }
 
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    public boolean touchUp(int x, int y, int p, int b) {
         return false;
     }
 
@@ -300,18 +244,15 @@ public class Main extends ApplicationAdapter implements InputProcessor {
         return false;
     }
 
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
+    public boolean touchDragged(int x, int y, int p) {
         return false;
     }
 
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
+    public boolean mouseMoved(int x, int y) {
         return false;
     }
 
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
+    public boolean scrolled(float x, float y) {
         return false;
     }
 }

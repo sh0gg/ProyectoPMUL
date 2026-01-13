@@ -243,8 +243,8 @@ public class Main extends ApplicationAdapter implements InputProcessor {
         reactionTime = baseReactionTime - 0.05f * level;  // Reducir lentamente la reacción por cada nivel
 
         // Aseguramos que los valores no sean negativos ni demasiado rápidos
-        countdownSpeed = Math
-        state = State.COUNTDOWN;.max(0.2f, countdownSpeed);  // Velocidad mínima de la cuenta atrás
+        countdownSpeed = Math.max(0.2f, countdownSpeed);
+        state = State.COUNTDOWN;  // Velocidad mínima de la cuenta atrás
         reactionTime = Math.max(0.5f, reactionTime);  // Tiempo de reacción mínimo
 
         startCountdown();
