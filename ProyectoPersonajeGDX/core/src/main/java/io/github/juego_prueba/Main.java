@@ -6,7 +6,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,9 +21,6 @@ public class Main extends ApplicationAdapter implements InputProcessor {
     private Texture whitePixel;
     private boolean gameOver = false;
     private BitmapFont font;
-
-    private OrthographicCamera camera;
-    private FitViewport viewport;
 
     private boolean movingLeft, movingRight, jumping, groundPound;
 
@@ -58,11 +54,6 @@ public class Main extends ApplicationAdapter implements InputProcessor {
         font = new BitmapFont();
         font.getData().setScale(2f);
 
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
-        camera.position.set(personaje.x + personaje.width / 2, personaje.y + personaje.height / 2, 0);
-        camera.update();
-
         Gdx.input.setInputProcessor(this);
     }
 
@@ -84,7 +75,7 @@ public class Main extends ApplicationAdapter implements InputProcessor {
 
         // Actualizar enemigos (les pasamos la cámara)
         for (Enemigo enemigo : enemigos) {
-            enemigo.update(delta, camera);
+            enemigo.update(delta);
         }
 
         // Dibujar enemigos
@@ -166,21 +157,6 @@ public class Main extends ApplicationAdapter implements InputProcessor {
 
             return;
         }
-
-        // Limitar los bordes de la cámara para no salir del mapa
-        float maxX = Math.max(Gdx.graphics.getWidth(), 2000);  // Tamaño máximo del mapa
-        float maxY = 1200;  // Altura máxima del mapa
-
-        camera.position.x = MathUtils.clamp(camera.position.x, Gdx.graphics.getWidth() / 2f, maxX - Gdx.graphics.getWidth() / 2f);
-        camera.position.y = MathUtils.clamp(camera.position.y, Gdx.graphics.getHeight() / 2f, maxY - Gdx.graphics.getHeight() / 2f);
-
-
-        // Actualizar la cámara para que siga al personaje
-        camera.position.set(personaje.x + personaje.width / 2, personaje.y + personaje.height / 2, 0);
-        camera.update();
-
-        // Establecer la matriz de proyección para el SpriteBatch
-        batch.setProjectionMatrix(camera.combined);
 
         // Dibujar personajes y plataformas
         batch.begin();

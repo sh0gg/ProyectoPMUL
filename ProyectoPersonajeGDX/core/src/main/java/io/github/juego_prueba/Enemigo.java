@@ -43,23 +43,16 @@ public class Enemigo {
         height = sprite.getHeight();
     }
 
-    public void update(float delta, OrthographicCamera camera) {
+    public void update(float delta) {
 
         stateTime += delta;
 
-        // Verificamos si el enemigo está dentro de los límites de la cámara
-        if (x + width > camera.position.x - camera.viewportWidth / 2 &&
-            x < camera.position.x + camera.viewportWidth / 2 &&
-            y + height > camera.position.y - camera.viewportHeight / 2 &&
-            y < camera.position.y + camera.viewportHeight / 2) {
-            canMove = true;  // El enemigo está dentro de la cámara y puede moverse
-        }
 
         if (canMove && alive) {
             // Movimiento normal
             x += speed * direction * delta;
 
-            if (x <= 0 || x + width >= camera.viewportWidth) {
+            if (x <= 0) {
                 direction *= -1;
                 sprite.setFlip(direction < 0, false);
             }
