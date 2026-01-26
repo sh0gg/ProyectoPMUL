@@ -10,11 +10,11 @@ public class Pescador {
     public float width, height;
 
     public float speedX = 400f;
-    private int lastDirection = 1;
+    int lastDirection = 1;
 
-    public Pescador(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public Pescador() {
+        this.x = 200;
+        this.y = 300;
 
         sprite = new Sprite(new Texture("pescador.png"));
         sprite.setSize(sprite.getWidth() * 0.5f, sprite.getHeight() * 0.5f);
@@ -36,6 +36,10 @@ public class Pescador {
         x += speedX * delta;
         lastDirection = 1;
         sprite.setFlip(false, false);
+    }
+
+    public float getPescadorY() {
+        return y;
     }
 
 
