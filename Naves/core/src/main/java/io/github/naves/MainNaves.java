@@ -21,8 +21,8 @@ public class MainNaves extends Game {
     public void create() {
         camara = new OrthographicCamera();
         sb = new SpriteBatch();
+        if(fuente == null) fuente = new BitmapFont();
         Pantalla.setJuego(this);
-        Gdx.input.setInputProcessor(new ProcesadorDeEntrada(this));
         setScreen(new PantallaInicio());
     }
 

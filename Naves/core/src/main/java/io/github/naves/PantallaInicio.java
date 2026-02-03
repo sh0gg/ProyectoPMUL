@@ -27,4 +27,24 @@ public class PantallaInicio extends Pantalla {
         juego.fuente.draw(juego.sb,"S para salir, otra tecla para jugar", 10,Mundo.ALTO/2);
         juego.sb.end();
     }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
 }
