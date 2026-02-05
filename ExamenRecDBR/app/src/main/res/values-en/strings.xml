@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ExamenRecDBR</string>
+    <string name="id">id</string>
+    <string name="enviar">Send</string>
+    <string name="onoff">OnOff</string>
+    <string name="hibernar">Hibernate</string>
+    <string name="status">status</string>
+</resources>

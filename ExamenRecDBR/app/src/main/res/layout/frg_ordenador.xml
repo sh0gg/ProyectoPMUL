@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivOrdenador"
+        android:layout_width="103dp"
+        android:layout_height="102dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ordenador" />
+
+    <TextView
+        android:id="@+id/tvID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/id"
+        app:layout_constraintBottom_toBottomOf="@+id/ivOrdenador"
+        app:layout_constraintEnd_toEndOf="@+id/ivOrdenador"
+        app:layout_constraintStart_toStartOf="@+id/ivOrdenador"
+        app:layout_constraintTop_toTopOf="@+id/ivOrdenador"
+        app:layout_constraintVertical_bias="0.385" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="61dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="73dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="11dp"
+        android:text="@string/status"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/ivOrdenador"
+        app:layout_constraintEnd_toEndOf="@+id/ivOrdenador"
+        app:layout_constraintStart_toStartOf="@+id/ivOrdenador"
+        app:layout_constraintTop_toTopOf="@+id/ivOrdenador" />
+
+    <EditText
+        android:id="@+id/etProcesador"
+        android:layout_width="250dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ivOrdenador"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bEnviar"
+        android:layout_width="82dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="11dp"
+        android:text="@string/enviar"
+        android:textAlignment="center"
+        android:textSize="8sp"
+        app:layout_constraintStart_toEndOf="@+id/ivOrdenador"
+        app:layout_constraintTop_toBottomOf="@+id/etProcesador" />
+
+    <Button
+        android:id="@+id/bOnOff"
+        android:layout_width="77dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/onoff"
+        android:textAlignment="center"
+        android:textSize="8sp"
+        app:layout_constraintStart_toEndOf="@+id/bEnviar"
+        app:layout_constraintTop_toBottomOf="@+id/etProcesador" />
+
+    <Button
+        android:id="@+id/bHibernar"
+        android:layout_width="75dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/hibernar"
+        android:textAlignment="center"
+        android:textSize="8sp"
+        app:layout_constraintStart_toEndOf="@+id/bOnOff"
+        app:layout_constraintTop_toBottomOf="@+id/etProcesador" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

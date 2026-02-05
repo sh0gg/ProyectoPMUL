@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ExamenRecDBR</string>
+    <string name="id">id</string>
+    <string name="enviar">Enviar</string>
+    <string name="onoff">OnOff</string>
+    <string name="hibernar">Hibernar</string>
+    <string name="status">status</string>
 </resources>
