@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        bar = new Bar(AsistenteBD.getNombreBar(1), 3, canalesSuscritos, numSuscripciones);
+        String nombreDelBar = asistenteBD.getNombreBar(1);
+        bar = new Bar(nombreDelBar, 3, canalesSuscritos, numSuscripciones);
         tvBar.setText(bar.getNombre());
 
         tele1 = new Televisor(bar, 1);
