@@ -1,0 +1,100 @@
+EXAMEN LibGDX — Checklist rápido (orden + qué cambiar)
+=====================================================
+(Usa esto como guía dentro del proyecto. Para patrones/snippets, abre chuleta_libgdx.md)
+
+0) Antes de tocar código (1 min)
+- Lee el enunciado y marca:
+  - INPUT: teclado / touch / ambos
+  - ENTIDADES: 1 (simple) o varias (arrays)
+  - COLISIONES: rect-rect / circle-rect / selección por grid
+  - HUD: arriba (TOP_BAR) o abajo (ALTO_BARRA_INFO)
+  - RECORD: sí/no y por modo/configuración
+  - FINAL: pantalla fin o reinicio dentro de PantallaJuego
+
+1) Ajustes iniciales (2 min)
+- Mundo.java:
+  - ANCHO, ALTO (según enunciado)
+  - TOP_BAR = 0 si NO hay barra superior
+  - TOP_BAR = 40 (o lo que pida) si hay HUD arriba
+- Main.java:
+  - Si usas TOP_BAR arriba: camera alto = ALTO + TOP_BAR
+  - Decide pantalla inicial:
+    - Rápido: setScreen(new PantallaJuego(this))
+    - Completo: setScreen(new PantallaInicio(this))
+
+2) Núcleo (que compile y dibuje) (2–3 min)
+- PantallaJuego:
+  - Deja stateTime += delta
+  - Deja drawHud() funcionando
+  - Dibuja la línea separadora si TOP_BAR > 0
+  - Ejecuta y comprueba: pantalla negra + texto Time
+
+3) Input correcto (3 min)
+- PantallaJuego.touchDown:
+  - Mantén camera.unproject (NO lo quites)
+  - Decide qué hace el toque:
+    - “clic sobre sprite” -> rect.contains(touch)
+    - “disparo” -> crea bala / añade a array
+    - “selección doble” -> selected == null / comparar valores
+- Si hay teclado: implementa keyDown/keyUp como en Naves
+
+4) Entidad mínima (5 min)
+Crea la(s) clase(s) que necesites (rápido):
+- Entidad con:
+  - x,y,w,h o radio
+  - Rectangle hitbox (o Circle)
+  - update(delta) + hitbox.setPosition
+  - render(batch) (si textura) o render(sr) (si shape)
+Pega 1 entidad en PantallaJuego y muévela en update(delta).
+
+5) Arrays + spawn (si aplica) (5–8 min)
+- Si hay varios enemigos/bloques/balas:
+  - Array<Entidad> lista = new Array<>();
+- Spawn por timer:
+  - float nextSpawn = 1f;
+  - nextSpawn -= delta; if(nextSpawn<=0){ spawn(); nextSpawn = random(min,max); }
+- Limpieza segura:
+  - recorrer de atrás hacia delante o Iterator
+
+6) Colisiones (5–8 min)
+- rect-rect: if (a.overlaps(b)) {...}
+- circle-rect: usa clamp + dx*dx+dy*dy <= r*r (ver chuleta)
+- selección en grid: convertir touch a celda o buscar bloque por bounds
+
+7) Game Over + reset (3–5 min)
+- PantallaJuego:
+  - triggerGameOver("motivo")
+  - Al gameOver:
+    - Mostrar texto en HUD
+    - touchDown: si gameOver -> reset()
+- reset():
+  - stateTime = 0
+  - limpiar arrays
+  - reset timers/spawns
+  - reset contador vidas/kills/puntos
+
+8) Records (solo si lo piden o si te da tiempo) (3–6 min)
+- Preferences:
+  - record = prefs.getFloat("record", 0)
+  - Mejoras:
+    - Si “más tiempo mejor”: if(stateTime > record) guardar
+    - Si “menos tiempo mejor”: if(record==0 || stateTime < record) guardar
+- Por modo/configuración:
+  - clave = "record_" + modo (o numEnemigos)
+
+9) HUD final (2–4 min)
+- Si TOP_BAR:
+  - imprime Time, Score, Record, Vidas/Kills
+- Si HUD abajo:
+  - usa y=20..30 y/o línea en HUD height
+- Alinea X para que no se salga de pantalla (no te obsesiones)
+
+10) Pulido mínimo (si sobra) (3–10 min)
+- Debug hitbox (ShapeRenderer line)
+- Evitar “new” dentro de render (reutiliza Vector2/Vector3)
+- Si hay botón/área táctil: usa Rectangle bounds (no justTouched global)
+
+Regla de oro (examen)
+- Primero: que funcione el núcleo (time + movimiento + input)
+- Segundo: colisiones + fin de juego
+- Tercero: records + pantallas extra + estética
