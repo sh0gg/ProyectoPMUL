@@ -4,7 +4,7 @@ EXAMEN LibGDX — Checklist rápido (orden + qué cambiar)
 
 0) Antes de tocar código (1 min)
 - Lee el enunciado y marca:
-  - INPUT: teclado / touch / ambos
+  - INPUT: teclado / (touch) / ambos
   - ENTIDADES: 1 (simple) o varias (arrays)
   - COLISIONES: rect-rect / circle-rect / selección por grid
   - HUD: arriba (TOP_BAR) o abajo (ALTO_BARRA_INFO)

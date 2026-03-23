@@ -5,25 +5,35 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import java.util.Random;
 
 public class PantallaJuego extends Pantalla {
 
     private float stateTime = 0f;
 
     // Records (si no los usas, puedes borrar este bloque)
-    private final Preferences prefs = Gdx.app.getPreferences("record.prefs");
-    private float record = 0f;
+//    private final Preferences prefs = Gdx.app.getPreferences("record.prefs");
+//    private float record = 0f;
     private boolean gameOver = false;
     private String motivo = "";
 
+    int vehiculosEscapados;
+
+    Array<Vehiculo> vehiculos = new Array<>();
+
+    private float tiempoRestante;
+
     // Vector reutilizable
-    private final Vector3 v3 = new Vector3();
+    Vector3 v3 = new Vector3(screenX, screenY, 0);
     private final Vector2 touch = new Vector2();
 
     public PantallaJuego(Main game) {
         super(game);
-        record = prefs.getFloat("record", 0f);
+        crearVehiculos();
+        vehiculosEscapados = 0;
     }
 
     @Override
@@ -33,6 +43,12 @@ public class PantallaJuego extends Pantalla {
         if (!gameOver) {
             stateTime += delta;
             update(delta);
+
+            tiempoRestante -= delta;
+            if (tiempoRestante <= 0) {
+                tiempoRestante = 0;
+                gameOver = true;
+            }
         }
 
         // HUD + sprites
@@ -40,9 +56,6 @@ public class PantallaJuego extends Pantalla {
         drawHud();
         drawSprites();
         batch.end();
-
-        // Shapes (debug, balas circulares, líneas HUD)
-        drawShapes();
     }
 
     private void update(float delta) {
@@ -58,8 +71,9 @@ public class PantallaJuego extends Pantalla {
         if (Mundo.TOP_BAR > 0) {
             // Texto en la barra (zona y > Mundo.ALTO)
             font.setColor(Color.WHITE);
-            font.draw(batch, "Time: " + String.format("%.2f", stateTime), 10, Mundo.ALTO + Mundo.TOP_BAR - 8);
-            font.draw(batch, "Record: " + String.format("%.2f", record), 170, Mundo.ALTO + Mundo.TOP_BAR - 8);
+            font.draw(batch, "Tiempo: " + String.format("%.2f", tiempoRestante), 10, Mundo.ALTO + Mundo.TOP_BAR - 8);
+            //font.draw(batch, "Record: " + String.format("%.2f", record), 170, Mundo.ALTO + Mundo.TOP_BAR - 8);
+            font.draw(batch, "Vehiculos: " + String.format("%.2f", vehiculosEscapados), 30, Mundo.ALTO + Mundo.TOP_BAR - 8);
 
             if (gameOver) {
                 font.draw(batch, "GAME OVER: " + motivo, 10, Mundo.ALTO + 18);
@@ -67,32 +81,35 @@ public class PantallaJuego extends Pantalla {
             }
         } else {
             // HUD sin barra
-            font.setColor(Color.WHITE);
+            font.setColor(Color.BLACK);
             font.draw(batch, "Time: " + String.format("%.2f", stateTime), 10, 20);
         }
     }
 
     private void drawSprites() {
         // TODO: batch.draw(textura, x,y,w,h);
-    }
+        batch.begin();
 
-    private void drawShapes() {
-        // Separador HUD (línea en y = Mundo.ALTO)
-        if (Mundo.TOP_BAR > 0) {
-            sr.begin(com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Filled);
-            sr.setColor(Color.WHITE);
-            sr.rect(0, Mundo.ALTO, Mundo.ANCHO, 1);
-            sr.end();
+        for (Vehiculo v : vehiculos) {
+            v.draw(batch);
         }
 
-        // TODO: debug rects / círculos balas:
-        // sr.begin(Filled); sr.circle(...); sr.end();
+        batch.end();
+
+    }
+
+    private void crearVehiculos() {
+        vehiculos.clear();
+        Random rnd = new Random();
+        @SuppressWarnings("NewApi") int nVehiculos = rnd.nextInt(1,20);
+        for (int i = 0; i > nVehiculos; i++) {
+            vehiculos.add(Vehiculo.crearAleatorio());
+        }
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        // Screen -> World (la receta)
         v3.set(screenX, screenY, 0);
         camera.unproject(v3);
         touch.set(v3.x, v3.y);
@@ -102,11 +119,9 @@ public class PantallaJuego extends Pantalla {
             return true;
         }
 
-        // TODO: aquí metes input del ejercicio:
-        // - comprobar si tocó sprite: rect.contains(touch)
-        // - selección de bloques
-        // - disparo
-        // - etc.
+        for (Vehiculo v : vehiculos) {
+            if (v.esTocado(v3))
+        }
 
         return true;
     }

@@ -1,0 +1,17 @@
+Realice una app utilizando libgdx con las siguientes características:
+
+Existirá una primera pantalla de inicio en donde se muestra el record actual del juego (mayor tiempo de juego en segundos y fecha/hora). Podremos pulsar R para resetear el record (mostrando el texto ‘SIN RECORD’), o cualquier otra tecla para comenzar el juego.
+En la pantalla del juego el usuario desplazará horizontalmente (utilizando los cursores) al personaje principal, que inicialmente aparecerá con la jarra vacía.
+Aparecerán por la parte superior, en posiciones aleatorias, y en una proporción 1/1, manzanas y cervezas. Ambas caerán hasta colisionar con el personaje, o con el suelo.
+Si la cerveza es recuperada (colisiona) con la parte del personaje que corresponde a la jarra vacía, entonces se llena (con la imagen entregada a tal efecto). En ese momento el personaje tendrá que ir hasta el límite derecho de la pantalla para que se vacíe en el depósito principal (recuperando la imagen original) y sumando en ese momento TIEMPO_BONUS segundos.
+Si la cerveza colisiona con la jarra llena, ni bonifica ni penaliza.
+Si la manzana colisiona con cualquier parte del personaje se quita una vida (de 3 vidas totales), lo cual se refleja en el color del fondo de pantalla (verde > amarillo > rojo > fin del juego).
+El juego se puede acabar por tres motivos:
+Se acaban los segundos de juego, que comienzan con TIEMPO_TOTAL segundos
+Nos hemos contaminado con 3 manzanas
+Se pulsa una tecla de salida (ESC)
+En la pantalla se verá en todo momento, el tiempo jugado y el tiempo que queda de juego, así como las zonas de colisión en el caso de que debug=true
+
+Ajuste los tamaños de los recursos entregados con unas proporciones aproximadas de 1,5 x 1 (bender), 1x4 (cerveza) y 1x1 (manzana).
+
+Los tamaños, tiempos, velocidades, apariciones y cambios de estado de los personajes se establecerán para proporcionar una adecuada jugabilidad.
