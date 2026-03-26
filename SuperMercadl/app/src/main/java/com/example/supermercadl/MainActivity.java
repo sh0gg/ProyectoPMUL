@@ -1,11 +1,14 @@
 package com.example.supermercadl;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +24,9 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvTicket;
+    private ListView lvTicket;
+    private List<String> lineasTicket;
+    private ArrayAdapter<String> adapterTicket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,40 +63,67 @@ public class MainActivity extends AppCompatActivity {
         spProductos.setAdapter(productoAdapter);
 
         EditText etNumeroArticulos = findViewById(R.id.etNumeroArticulos);
-        tvTicket = findViewById(R.id.tvTicket);
-        empezarTicket(); // ver metodo, es para poner la cabecera de tabla en el tvTicket
+
+        lvTicket = findViewById(R.id.lvTicket);
+        lineasTicket = new ArrayList<>();
+        adapterTicket = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lineasTicket);
+        lvTicket.setAdapter(adapterTicket);
+
+        // empezarTicket(); ver metodo, es para poner la cabecera de tabla en el tvTicket -- YA NO EXISTE EL METODO, CAMBIE A LV
         Button bAdd = findViewById(R.id.bAdd);
         Button bSend = findViewById(R.id.bSend);
         Button bCancel = findViewById(R.id.bCancel);
 
-
         bAdd.setOnClickListener(v -> {
+            String cantidadStr = etNumeroArticulos.getText().toString();
+            if (!cantidadStr.matches("[1-9]+")) {
+                Toast.makeText(this, "Escribe un número entero (solo dígitos), mayor que cero", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int numeroArticulos = Integer.parseInt(cantidadStr);
+
             Producto producto = (Producto) spProductos.getSelectedItem();
-            int numeroArticulos = Integer.parseInt(etNumeroArticulos.getText().toString());
-            carrito.put(producto, numeroArticulos);
-            String linea = "\n " + numeroArticulos + " | " + producto.getNombre() + " | " + producto.getPrecio() + "€ | " + producto.getPrecio() * numeroArticulos + "€";
-            tvTicket.append(linea);
+
+            if (carrito.containsKey(producto)) {
+                int cantidadAnterior = carrito.get(producto);
+                carrito.put(producto, cantidadAnterior + numeroArticulos);
+            } else {
+                carrito.put(producto, numeroArticulos);
+            }
+
+            double subTotal = producto.getPrecio() * numeroArticulos;
+            String linea = numeroArticulos + " x " + producto.getNombre() + " | Subtotal: " + subTotal + "€";
+            lineasTicket.add(linea);
+            adapterTicket.notifyDataSetChanged();
+
+            etNumeroArticulos.setText(""); // limpiar campo
         });
 
         bSend.setOnClickListener(v -> {
             // TODO: Mandar el mapa a una nueva activity mediante intent y limpiar (carrito y tvTicket)
+            if (carrito.isEmpty()) {
+                Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent intent = new Intent(MainActivity.this, ResumenActivity.class);
+            intent.putExtra("carritoCompra", (Serializable) carrito);
+            startActivity(intent);
 
             // limpiar
             carrito.clear();
-            empezarTicket();
+            lineasTicket.clear();
+            adapterTicket.notifyDataSetChanged();
         });
 
         bCancel.setOnClickListener(v -> {
             carrito.clear();
-            empezarTicket();
+            lineasTicket.clear();
+            adapterTicket.notifyDataSetChanged();
         });
 
 
     }
 
-    private void empezarTicket() {
-        tvTicket.setText("");
-        String cabecera = "Cantidad | Producto | Precio | Total";
-        tvTicket.setText(cabecera);
-    }
 }

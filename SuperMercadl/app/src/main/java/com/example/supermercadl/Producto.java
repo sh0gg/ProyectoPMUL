@@ -1,6 +1,10 @@
 package com.example.supermercadl;
 
-public class Producto {
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
+
+public class Producto implements Serializable {
     private int id;
     private String nombre;
     private double precio;
@@ -33,5 +37,11 @@ public class Producto {
 
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return nombre + " - " + precio + "€";
     }
 }
