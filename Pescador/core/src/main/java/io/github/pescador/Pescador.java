@@ -9,42 +9,36 @@ public class Pescador {
     public float x, y;
     public float width, height;
 
-    public float speedX = 400f;
-    int lastDirection = 1;
+    public int lastDirection = 1; // 0 izquierda, 1 derecha
 
     public Pescador() {
-        this.x = 200;
-        this.y = 300;
-
         sprite = new Sprite(new Texture("pescador.png"));
         sprite.setSize(sprite.getWidth() * 0.5f, sprite.getHeight() * 0.5f);
 
         width = sprite.getWidth();
         height = sprite.getHeight();
+
+        x = Mundo.ANCHO / 2f - width / 2f;
+        y = Mundo.PESCADOR_Y;
     }
 
     public void update(float delta) {
+        // si luego quieres animación/estado, va aquí
     }
 
     public void moveLeft(float delta) {
-        x -= speedX * delta;
+        x -= Mundo.PESCADOR_SPEED_X * delta;
         lastDirection = 0;
         sprite.setFlip(true, false);
     }
 
     public void moveRight(float delta) {
-        x += speedX * delta;
+        x += Mundo.PESCADOR_SPEED_X * delta;
         lastDirection = 1;
         sprite.setFlip(false, false);
     }
 
-    public float getPescadorY() {
-        return y;
+    public void dispose() {
+        sprite.getTexture().dispose();
     }
-
-
-    public void setTexture(String texture) {
-        sprite.setTexture(new Texture(texture));
-    }
-
 }

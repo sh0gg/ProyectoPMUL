@@ -1,0 +1,40 @@
+@Override
+public void render(float delta) {
+
+    // 1) Clear
+    ScreenUtils.clear(0, 0, 0, 1);
+
+    // 2) Update lógica (sin dibujar)
+    update(delta);
+
+    // 3) Asegurar matrices (si usas cámara)
+    batch.setProjectionMatrix(camera.combined);
+    sr.setProjectionMatrix(camera.combined);
+
+    // 4) DIBUJO con SpriteBatch (texturas, texto)
+    batch.begin();
+
+    // Texturas
+    batch.draw(texPlayer, player.x, player.y, player.w, player.h);
+
+    // Texto (HUD)
+    font.draw(batch, "Time: " + (int)stateTime, 10, 20);
+
+    batch.end();
+
+    // 5) DIBUJO con ShapeRenderer (debug hitbox, círculos, líneas)
+    sr.begin(ShapeRenderer.ShapeType.Line);
+
+    // Debug rectángulos (hitboxes)
+    sr.rect(playerRect.x, playerRect.y, playerRect.width, playerRect.height);
+
+    // Línea HUD (ejemplo)
+    sr.line(0, HUD_Y, WORLD_W, HUD_Y);
+
+    sr.end();
+
+    // Si quieres círculos rellenos (balas), usa otro bloque:
+    sr.begin(ShapeRenderer.ShapeType.Filled);
+    sr.circle(bulletX, bulletY, bulletR);
+    sr.end();
+}

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SuperMercado</string>
+    <string name="carrefour_estr_s">Carrefour Estrés</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="cabecera">Cant. | Producto | Precio | Total</string>
+</resources>
