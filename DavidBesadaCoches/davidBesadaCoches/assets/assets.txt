@@ -1,0 +1,6 @@
+amarillo.jpg
+libgdx.png
+moto.png
+obstaculo.png
+rojo.jpg
+verde.jpg

@@ -1,0 +1,33 @@
+el semaforo se crearia en el hide() de PI no en show de PJ
+
+
+
+Realice con libgdx el juego S&S, donde intentaremos que escapen de la pantalla
+el mayor número de vehículos posible. Estas son sus características:
+Una primera pantalla de inicio:
+• Se muestra el record para la configuración actual (o “sin record”)
+• con R se resetea el record para la configuración actuales
+• con otra tecla, se empieza a jugar
+La configuración será el n.º inicial de segundos del juego.
+El record será el mayor número de vehículos que han conseguido escapar.
+Una segunda pantalla de juego con las siguientes características:
+Existe una barra superior horizontal que mostrará, de izqda a derecha:
+• el tiempo restante de juego
+• n.º de vehículos que han escapado
+• semáforo de tres colores
+El semáforo cambiará entre verde→amarillo→rojo→verde→… cada TPO_SEMAFORO
+- De izquierda a derecha, los vehículos saldrán a distintos intervalos de
+tiempo, velocidades y posiciones en el eje y (todo aleatorio entre unos rangos
+razonables).
+- El movimiento de los vehículos no se maneja directamente, sino que solo se
+podrán parar/reanudar (individualmente) con un clic de ratón.
+- Los vehículos no podrán salir nada por la derecha con el semáforo rojo.
+- Cada vehículo que escapa aumenta el tiempo restante en TPO_BONUS.
+El juego se acaba si:
+• sale de la pantalla un vehículo con el semáforo en rojo.
+• se acaba el tiempo.
+
+Si se hace clic en una zona de la pantalla donde no hay un vehículo, se
+generará un pequeño muro donde los coches chocan y desaparecen (los coches, no los muros).
+Una tercera pantalla de pausa, pulsando P en el juego, que ocultará la vista
+actual del juego, y cualquier tecla lo reanudará en el mismo estado

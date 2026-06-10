@@ -1,149 +1,103 @@
 package io.github.examenDBR;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import java.util.Random;
-
 public class PantallaJuego extends Pantalla {
-
-    private float stateTime = 0f;
-
-    // Records (si no los usas, puedes borrar este bloque)
-//    private final Preferences prefs = Gdx.app.getPreferences("record.prefs");
-//    private float record = 0f;
-    private boolean gameOver = false;
-    private String motivo = "";
-
-    int vehiculosEscapados;
-
-    Array<Vehiculo> vehiculos = new Array<>();
-
-    private float tiempoRestante;
-
-    // Vector reutilizable
-    Vector3 v3 = new Vector3(screenX, screenY, 0);
-    private final Vector2 touch = new Vector2();
+    float stateTime = 0f;
+    float spawnTime = 1f;
+    Array<Globo> globos = new Array<>(Mundo.TOTAL_GLOBOS);
+    int globosLanzados = 0;
 
     public PantallaJuego(Main game) {
         super(game);
-        crearVehiculos();
-        vehiculosEscapados = 0;
+        Mundo.puntos = Mundo.escapados = 0;
     }
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0.12f, 0.12f, 0.12f, 1f);
+        ScreenUtils.clear(0, 0, 0, 1);
+        stateTime += delta;
 
-        if (!gameOver) {
-            stateTime += delta;
-            update(delta);
-
-            tiempoRestante -= delta;
-            if (tiempoRestante <= 0) {
-                tiempoRestante = 0;
-                gameOver = true;
-            }
+        // spawneo de globos
+        spawnTime -= delta; //decrece el timer
+        if (spawnTime < 0f && globosLanzados < Mundo.TOTAL_GLOBOS) { // sale uno cada vez que el tiempo es cero Y el numero de globos no llegue al total de globos
+            globos.add(new Globo());
+            globosLanzados++;
+            spawnTime = MathUtils.random(Mundo.spawnMin, Mundo.spawnMax); // se reestablece
         }
 
-        // HUD + sprites
+        // update de globos
+        for (Globo g : globos) {
+            g.update(delta);
+        }
+
+        // update de los globos colisiones y escapados
+        for (int i = globos.size - 1; i >= 0; i--) {
+            Globo g = globos.get(i);
+            if (g.destroyed) {
+                globos.removeIndex(i);
+                Mundo.puntos++;
+            } else if (g.y > Mundo.ALTO) {
+                globos.removeIndex(i);
+                Mundo.escapados++;
+            }
+            if (Mundo.escapados >= Mundo.MAX_ESCAPADOS) {
+                terminarPartida(false);
+            }
+            if (Mundo.puntos >= Mundo.TOTAL_GLOBOS) {
+                terminarPartida(true);
+            }
+        }
+        // globos pinchados + escapados == total (no more globos)
+        if (globosLanzados >= Mundo.TOTAL_GLOBOS && globos.isEmpty()) {
+            terminarPartida(Mundo.escapados < Mundo.MAX_ESCAPADOS);
+        }
+
+        // pintar los globos
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        for (Globo g : globos) g.render(sr);
+        sr.end();
+
+        if (Mundo.DEBUG) {
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            for (Globo g : globos) g.renderDebug(sr);
+            sr.end();
+        }
+
+        // HUD
         batch.begin();
-        drawHud();
-        drawSprites();
+
+        font.draw(batch, "Tiempo: " + String.format("%.2f", stateTime), 10, Mundo.ALTO + Mundo.TOP_BAR);
+        font.draw(batch, "Puntos: " + Mundo.puntos + "  Escapados: " + Mundo.escapados + "/" + Mundo.MAX_ESCAPADOS, 200, Mundo.ALTO + Mundo.TOP_BAR);
+
         batch.end();
     }
 
-    private void update(float delta) {
-        // TODO: aquí metes tu lógica del ejercicio:
-        // - movimiento con delta
-        // - spawn por timer
-        // - colisiones
-        // - condiciones de fin => triggerGameOver("...");
-    }
-
-    private void drawHud() {
-        // Barra superior
-        if (Mundo.TOP_BAR > 0) {
-            // Texto en la barra (zona y > Mundo.ALTO)
-            font.setColor(Color.WHITE);
-            font.draw(batch, "Tiempo: " + String.format("%.2f", tiempoRestante), 10, Mundo.ALTO + Mundo.TOP_BAR - 8);
-            //font.draw(batch, "Record: " + String.format("%.2f", record), 170, Mundo.ALTO + Mundo.TOP_BAR - 8);
-            font.draw(batch, "Vehiculos: " + String.format("%.2f", vehiculosEscapados), 30, Mundo.ALTO + Mundo.TOP_BAR - 8);
-
-            if (gameOver) {
-                font.draw(batch, "GAME OVER: " + motivo, 10, Mundo.ALTO + 18);
-                font.draw(batch, "TOCA para reiniciar", 10, Mundo.ALTO + 6);
-            }
-        } else {
-            // HUD sin barra
-            font.setColor(Color.BLACK);
-            font.draw(batch, "Time: " + String.format("%.2f", stateTime), 10, 20);
-        }
-    }
-
-    private void drawSprites() {
-        // TODO: batch.draw(textura, x,y,w,h);
-        batch.begin();
-
-        for (Vehiculo v : vehiculos) {
-            v.draw(batch);
-        }
-
-        batch.end();
-
-    }
-
-    private void crearVehiculos() {
-        vehiculos.clear();
-        Random rnd = new Random();
-        @SuppressWarnings("NewApi") int nVehiculos = rnd.nextInt(1,20);
-        for (int i = 0; i > nVehiculos; i++) {
-            vehiculos.add(Vehiculo.crearAleatorio());
-        }
-    }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        v3.set(screenX, screenY, 0);
-        camera.unproject(v3);
-        touch.set(v3.x, v3.y);
+        // Cuando la resolucion de la pantalla y del mundo no coinciden, te toca desproyectar la camara para calcular donde has pinchao
+        Vector3 vector3 = new Vector3(screenX, screenY, 0f);
+        camera.unproject(vector3);
 
-        if (gameOver) {
-            reset();
-            return true;
+        for (Globo g : globos) {
+            if (g.isHit(vector3.x, vector3.y)) {
+                g.destroyed = true;
+                break;
+            }
         }
-
-        for (Vehiculo v : vehiculos) {
-            if (v.esTocado(v3))
-        }
-
         return true;
     }
 
-    private void triggerGameOver(String motivo) {
-        this.gameOver = true;
-        this.motivo = motivo;
-
-        // Record (si es “más tiempo mejor”)
-        if (stateTime > record) {
-            record = stateTime;
-            prefs.putFloat("record", record);
-            prefs.flush();
-        }
-    }
-
-    private void reset() {
-        stateTime = 0f;
-        gameOver = false;
-        motivo = "";
-        record = prefs.getFloat("record", 0f);
-
-        // TODO: reset de arrays/entidades/spawn timers...
+    private void terminarPartida(boolean victoria) {
+        Mundo.victoria = victoria;
+        Mundo.tiempoFinal = stateTime;
+        Mundo.guardarRecord(stateTime);
+        game.setScreen(new PantallaResultado(game));
     }
 }

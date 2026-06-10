@@ -17,7 +17,6 @@ public abstract class Pantalla extends InputAdapter implements Screen {
     public SpriteBatch batch;
     public ShapeRenderer sr;
     public BitmapFont font;
-    public GlyphLayout layout;
 
     public Pantalla(Main game) {
         this.game = game;
@@ -26,7 +25,6 @@ public abstract class Pantalla extends InputAdapter implements Screen {
         this.batch = game.batch;
         this.sr = game.sr;
         this.font = game.font;
-        this.layout = game.layout;
 
         // Por si alguien cambia matrices en otra pantalla
         batch.setProjectionMatrix(camera.combined);

@@ -1,0 +1,45 @@
+ERROR: récord se vuelve 0,00 al cambiar a pantalla final
+    estab ahciendo reset en PantallaJuego, y al cambiar a fin el statetime se vuelve 0, aunque el record se guarde
+    cambio Reset a PantallaFin()
+    Esto también daba por culo al poner la pantalla de pausa.
+
+método:
+    getRecord() / setRecord()
+    getRecord(config)
+    guardar el record con clave,
+    controlar tiempo entre enemigos
+
+
+Siguiendo ejercicio bender
+
+Clases de personajes
+    enum estado
+    publoc void izquierda/derecha/parado
+
+
+Quién elimina el enemigo del mapa?
+AÑADIR: pantalla final y pausa
+
+CORREGIR: los récords por dificultas
+    AÑADIDO getDificiltadActual en Mundo
+
+    El problema principal de los récords está en que:
+
+    Estás usando Preferences prefs, pero nunca accedes a ellas desde Mundo.
+    Probablemente getRecord() y setRecord() no están diferenciando correctamente cada dificultad.
+    Estás usando (int) Mundo.tiempoEntreEnemigos como clave, pero:
+    3f, 2f, 1f se convierten en 3, 2, 1
+    eso funciona, pero es poco claro y fácil de romper.
+
+    La solución más limpia es guardar los récords con claves explícitas:
+    "facil"
+    "normal"
+    "dificil"
+
+
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "io.github.semaforos.Semaforo.dibujar(com.badlogic.gdx.graphics.g2d.SpriteBatch)" because "io.github.semaforos.Mundo.semaforo" is null
+no estaba creando el semaforo xd
+lo pongo el show() de la pantalla juego. +
+
+ojo con importar awt en las hitbox, s una mierda xd
+
